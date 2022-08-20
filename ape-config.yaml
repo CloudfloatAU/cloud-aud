@@ -1,0 +1,4 @@
+name: Cloud AUD
+plugins:
+  - name: vyper
+  - name: infura
