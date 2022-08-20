@@ -13,9 +13,9 @@ from vyper.interfaces import ERC20
 implements: ERC20
 
 # ERC20 Token Metadata
-name: constant(String[20]) = "Cloud AUD"
-symbol: constant(String[4]) = "CAUD"
-decimals: constant(uint8) = 18
+NAME: constant(String[20]) = "Cloud AUD"
+SYMBOL: constant(String[4]) = "CAUD"
+DECIMALS: constant(uint8) = 18
 
 # ERC20 State Variables
 totalSupply: public(uint256)
@@ -43,6 +43,24 @@ def __init__():
     self.totalSupply = 1000
     self.balanceOf[msg.sender] = 1000
     log Transfer(ZERO_ADDRESS, msg.sender, self.totalSupply)
+
+
+@pure
+@external
+def name() -> String[20]:
+    return NAME
+
+
+@pure
+@external
+def symbol() -> String[5]:
+    return SYMBOL
+
+
+@pure
+@external
+def decimals() -> uint8:
+    return DECIMALS
 
 
 @external
