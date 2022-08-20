@@ -8,9 +8,14 @@ Generated from [token-template](https://github.com/ApeAcademy/token-template) by
 
 ## Deploy the contract
 
-This project uses vyper via the [ape](https://github.com/apeWorX/ape) framework.
+This project uses vyper via the [ape](https://github.com/apeWorX/ape) framework. With
+ape installed, install the required plugins with:
 
-To deploy it, [add an account via ape](https://docs.apeworx.io/ape/stable/userguides/accounts.html)
+```shell
+ape plugins install .
+```
+
+To compile and deploy the contract, [add an account via ape](https://docs.apeworx.io/ape/stable/userguides/accounts.html)
 and run:
 
 ```shell
