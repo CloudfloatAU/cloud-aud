@@ -13,12 +13,13 @@ def test_initial_state(token, owner):
     # token.method_name() has access to all the methods in the smart contract.
     assert token.name() == "Cloud AUD"
     assert token.symbol() == "CAUD"
-    assert token.decimals() == 18
+    assert token.decimals() == 8
 
     # Check of intial state of authorization
     assert token.owner() == owner
 
     # Check intial balance of tokens
+    token.mint(owner, 1000, sender=owner)
     assert token.totalSupply() == 1000
     assert token.balanceOf(owner) == 1000
 
@@ -29,6 +30,7 @@ def test_transfer(token, owner, receiver):
     Must trigger Transfer Event.
     Should throw an error of balance if sender does not have enough funds.
     """
+    token.mint(owner, 1000, sender=owner)
     owner_balance = token.balanceOf(owner)
     assert owner_balance == 1000
 
@@ -72,6 +74,7 @@ def test_transfer_from(token, owner, accounts):
     """
     receiver, spender = accounts[1:3]
 
+    token.mint(owner, 1000, sender=owner)
     owner_balance = token.balanceOf(owner)
     assert owner_balance == 1000
 
@@ -149,6 +152,7 @@ def test_mint(token, owner, receiver):
     """
     Create an approved amount of tokens.
     """
+    token.mint(owner, 1000, sender=owner)
     totalSupply = token.totalSupply()
     assert totalSupply == 1000
 
@@ -174,6 +178,7 @@ def test_burn(token, owner):
     """
     Burn/Send amount of tokens to ZERO Address.
     """
+    token.mint(owner, 1000, sender=owner)
     totalSupply = token.totalSupply()
     assert totalSupply == 1000
 
