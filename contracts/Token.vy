@@ -1,4 +1,4 @@
-# @version ^0.3.6
+# @version 0.3.3
 
 """
 @title Bare-bones Token implementation
@@ -14,8 +14,8 @@ implements: ERC20
 
 # ERC20 Token Metadata
 NAME: constant(String[20]) = "Cloud AUD"
-SYMBOL: constant(String[4]) = "CAUD"
-DECIMALS: constant(uint8) = 18
+SYMBOL: constant(String[5]) = "CAUD"
+DECIMALS: constant(uint8) = 8
 
 # ERC20 State Variables
 totalSupply: public(uint256)
@@ -40,9 +40,7 @@ isMinter: public(HashMap[address, bool])
 @external
 def __init__():
     self.owner = msg.sender
-    self.totalSupply = 1000
-    self.balanceOf[msg.sender] = 1000
-    log Transfer(ZERO_ADDRESS, msg.sender, self.totalSupply)
+    self.totalSupply = 0
 
 
 @pure
