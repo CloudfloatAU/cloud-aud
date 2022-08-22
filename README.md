@@ -4,7 +4,7 @@ Cloud AUD (**CAUD**) is an interest-bearing stablecoin redeemable one to one for
 Australian Dollar.
 
 Generated from [token-template](https://github.com/ApeAcademy/token-template) by
-[Ape Academy](academy.apeworx.io).
+[Ape Academy](https://academy.apeworx.io).
 
 ## Deploy the contract
 
