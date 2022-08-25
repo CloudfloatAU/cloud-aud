@@ -2,7 +2,6 @@
 
 """
 @title Bare-bones Token implementation
-@author Corentin Mercier
 @notice
     Based on the ERC-20 token standard as defined at
     https://github.com/ethereum/EIPs/issues/20
