@@ -2,6 +2,10 @@
 .build/
 TestProject/
 
+# VScode or IntelliJ
+.vscode
+.idea
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
