@@ -62,6 +62,7 @@ def decimals() -> uint8:
 
 @external
 def transfer(receiver: address, amount: uint256) -> bool:
+    assert receiver != ZERO_ADDRESS, "Cannot transfer to null address"
     self.balanceOf[msg.sender] -= amount
     self.balanceOf[receiver] += amount
 
