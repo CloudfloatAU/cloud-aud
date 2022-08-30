@@ -1,0 +1,11 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  Lint:
+    name: Check coding style
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check that all Python code is linted with black
+        run: pip install black && black . --check
