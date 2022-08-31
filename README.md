@@ -13,10 +13,11 @@
 ## Usage
 
 This project uses [Vyper](https://vyper.readthedocs.io/en/stable/) via the
-[ape](https://github.com/apeWorX/ape) framework. With ape installed, install the
-required plugins with:
+[ape](https://github.com/apeWorX/ape) framework. Install the requirements and required
+plugins with:
 
 ```shell
+pip install -r requirements.txt
 ape plugins install .
 ```
 
