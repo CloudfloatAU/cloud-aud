@@ -4,6 +4,8 @@ on: [push]
 
 jobs:
   Lint:
+    - uses: actions/checkout@v3
+
     name: Check coding style
     runs-on: ubuntu-latest
     steps:
