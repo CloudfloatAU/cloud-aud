@@ -78,6 +78,7 @@ def transferFrom(sender: address, receiver: address, amount: uint256) -> bool:
         behalf. For example a decentralized exchange would make use of this method,
         once given authorization via the approve method.
     """
+    assert receiver != ZERO_ADDRESS, "Cannot transfer to null address"
     self.allowance[sender][msg.sender] -= amount
     self.balanceOf[sender] -= amount
     self.balanceOf[receiver] += amount
