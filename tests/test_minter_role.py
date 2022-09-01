@@ -22,7 +22,7 @@ def test_add_minter_targeting_zero_address(token, owner):
     """
     target = ZERO_ADDRESS
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
-      token.addMinter(target, sender=owner)
+        token.addMinter(target, sender=owner)
     assert exc_info.value.args[0] == "Cannot add null address as minter"
 
 def test_remove_minter(token, owner, accounts):
