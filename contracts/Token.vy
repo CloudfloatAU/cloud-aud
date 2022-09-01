@@ -129,7 +129,8 @@ def mint(receiver: address, amount: uint256) -> bool:
 
 
 @external
-def addMinter(minter: address) -> bool:
+def addMinter(target: address) -> bool:
     assert msg.sender == self.owner
-    self.isMinter[msg.sender] = True
+    assert target != ZERO_ADDRESS, "Cannot add null address as minter"
+    self.isMinter[target] = True
     return True
