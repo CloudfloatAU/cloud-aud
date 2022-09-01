@@ -4,10 +4,11 @@ on: [push]
 
 jobs:
   Lint:
-    - uses: actions/checkout@v3
-
     name: Check coding style
     runs-on: ubuntu-latest
     steps:
+      # clone repo and check out
+      - uses: actions/checkout@v3
+
       - name: Check that all Python code is linted with black
         run: pip install black && black . --check
