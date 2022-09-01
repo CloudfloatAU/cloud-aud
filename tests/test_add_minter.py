@@ -5,15 +5,17 @@ import pytest
 # consts
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
+
 def test_add_minter(token, owner, accounts):
     """
     Test adding new minter.
     Must trigger MinterAdded Event.
     Must return true when checking if target isMinter
     """
-    target = accounts[1] 
+    target = accounts[1]
     token.addMinter(target, sender=owner)
     assert token.isMinter(target) == True
+
 
 def test_add_minter_targeting_zero_address(token, owner):
     """
@@ -22,5 +24,5 @@ def test_add_minter_targeting_zero_address(token, owner):
     """
     target = ZERO_ADDRESS
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
-      token.addMinter(target, sender=owner)
+        token.addMinter(target, sender=owner)
     assert exc_info.value.args[0] == "Cannot add null address as minter"
