@@ -134,3 +134,11 @@ def addMinter(target: address) -> bool:
     assert target != ZERO_ADDRESS, "Cannot add null address as minter"
     self.isMinter[target] = True
     return True
+
+
+@external
+def removeMinter(target: address) -> bool:
+    assert msg.sender == self.owner
+    assert self.isMinter[target] == True, "Targeted address is not a minter"
+    self.isMinter[target] = False
+    return True
