@@ -5,6 +5,7 @@ import pytest
 # Standard test comes from the interpretation of EIP-20
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
+
 def test_transfer_to_zero_address(token, owner):
     """
     Transfer must not transfer an amount to a zero address.
@@ -19,9 +20,10 @@ def test_transfer_to_zero_address(token, owner):
     assert receiver_balance == 0
 
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
-      token.transfer(receiver, 100, sender=owner)
+        token.transfer(receiver, 100, sender=owner)
 
     assert exc_info.value.args[0] == "Cannot transfer to null address"
+
 
 def test_transfer_from_to_zero_address(token, owner, accounts):
     """
@@ -53,6 +55,6 @@ def test_transfer_from_to_zero_address(token, owner, accounts):
     assert token.allowance(owner, spender) == 300
 
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
-      tx = token.transferFrom(owner, receiver, 200, sender=spender)
+        tx = token.transferFrom(owner, receiver, 200, sender=spender)
 
     assert exc_info.value.args[0] == "Cannot transfer to null address"
