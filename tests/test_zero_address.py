@@ -2,11 +2,8 @@
 import ape
 import pytest
 
-# Standard test comes from the interpretation of EIP-20
-ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
-
-def test_transfer_to_zero_address(token, owner):
+def test_transfer_to_zero_address(token, owner, ZERO_ADDRESS):
     """
     Transfer must not transfer an amount to a zero address.
     Must trigger a ContractLogicError (ape.exceptions.ContractLogicError)
@@ -25,7 +22,7 @@ def test_transfer_to_zero_address(token, owner):
     assert exc_info.value.args[0] == "Cannot transfer to null address"
 
 
-def test_transfer_from_to_zero_address(token, owner, accounts):
+def test_transfer_from_to_zero_address(token, owner, accounts, ZERO_ADDRESS):
     """
     TransferFrom must not transfer tokens to a zero address.
     Must trigger a ContractLogicError (ape.exceptions.ContractLogicError)

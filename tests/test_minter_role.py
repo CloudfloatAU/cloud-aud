@@ -2,9 +2,6 @@
 import ape
 import pytest
 
-# consts
-ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
-
 
 def test_add_minter(token, owner, accounts):
     """
@@ -17,7 +14,7 @@ def test_add_minter(token, owner, accounts):
     assert token.isMinter(target) == True
 
 
-def test_add_minter_targeting_zero_address(token, owner):
+def test_add_minter_targeting_zero_address(token, owner, ZERO_ADDRESS):
     """
     Test adding new minter targeting ZERO_ADDRESS
     Must trigger a ContractLogicError (ape.exceptions.ContractLogicError)
@@ -66,7 +63,7 @@ def test_remove_minter_targeting_already_removed(token, owner, accounts):
     assert exc_info.value.args[0] == "Targeted address is not a minter"
 
 
-def test_remove_minter_targeting_zero_address(token, owner):
+def test_remove_minter_targeting_zero_address(token, owner, ZERO_ADDRESS):
     """
     Test removing address from minter role targeting ZERO_ADDRESS
     Must trigger a ContractLogicError (ape.exceptions.ContractLogicError)
