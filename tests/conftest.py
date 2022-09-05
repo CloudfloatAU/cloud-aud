@@ -20,11 +20,9 @@ def token(owner, project):
 def ZERO_ADDRESS() -> str:
     """
     Zero / Null Address
+    https://consensys.github.io/smart-contract-best-practices/development-recommendations/token-specific/zero-address/
 
-    ---
-    :see: https://consensys.github.io/smart-contract-best-practices/development-recommendations/token-specific/zero-address/
-
-    :returns: "0x0000000000000000000000000000000000000000"
-    :rtype: str
+    Returns:
+        "0x0000000000000000000000000000000000000000"
     """
     return "0x0000000000000000000000000000000000000000"
