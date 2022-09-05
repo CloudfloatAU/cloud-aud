@@ -1,8 +1,4 @@
 import ape
-import pytest
-
-# Standard test comes from the interpretation of EIP-20
-ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 
 def test_initial_state(token, owner):
@@ -148,7 +144,7 @@ def test_approve(token, owner, receiver):
     assert token.allowance(owner, spender) == 0
 
 
-def test_mint(token, owner, receiver):
+def test_mint(token, owner, receiver, ZERO_ADDRESS):
     """
     Create an approved amount of tokens.
     """
