@@ -11,6 +11,8 @@ jobs:
     - uses: actions/setup-python@v4
       with:
         python-version: "3.10"
-    - uses: ApeWorX/github-action@v1
+
+    - run: pip install -r requirements.txt
+    - run: ape plugins install .
     - run: ape compile --size
     - run: ape test -s

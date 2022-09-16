@@ -1,3 +1,2 @@
-eth-ape==0.4.*
-eip712
+eth-ape==0.5.1
 pytest
