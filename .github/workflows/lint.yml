@@ -3,7 +3,7 @@ name: Lint
 on: [push]
 
 jobs:
-  Lint:
+  lint:
     name: Check coding style
     runs-on: ubuntu-latest
     steps:
