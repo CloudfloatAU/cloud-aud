@@ -143,3 +143,11 @@ def removeMinter(target: address) -> bool:
     assert self.isMinter[target] == True, "Targeted address is not a minter"
     self.isMinter[target] = False
     return True
+
+
+@external
+def revokeMinter() -> bool:
+    assert self.isMinter[msg.sender] == True, "Sender is not a minter"
+    self.isMinter[msg.sender] = False
+    return True
+
