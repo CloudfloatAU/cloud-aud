@@ -180,6 +180,17 @@ def removeBurner(target: address) -> bool:
 
 
 @external
+def revokeBurner() -> bool:
+    """
+    @notice Function to revoke own burner role from sender.
+    @return A boolean that indicates if the operation was successful.
+    """
+    assert self.isBurner[msg.sender] == True, "Sender is not a burner"
+    self.isBurner[msg.sender] = False
+    return True
+
+
+@external
 def addMinter(target: address) -> bool:
     assert msg.sender == self.owner
     assert target != ZERO_ADDRESS, "Cannot add null address as minter"
