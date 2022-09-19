@@ -34,6 +34,7 @@ event Approval:
 
 owner: public(address)
 isMinter: public(HashMap[address, bool])
+isBurner: public(HashMap[address, bool])
 
 
 @external
