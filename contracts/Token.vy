@@ -154,6 +154,19 @@ def mint(receiver: address, amount: uint256) -> bool:
 
 
 @external
+def addBurner(target: address) -> bool:
+    """
+    @notice Function to grant burner role to targeted address.
+    @param target  Address to have token burner role granted.
+    @return A boolean that indicates if the operation was successful.
+    """
+    assert msg.sender == self.owner, "Access is denied."
+    assert target != ZERO_ADDRESS, "Cannot add null address as burner"
+    self.isBurner[target] = True
+    return True
+
+
+@external
 def addMinter(target: address) -> bool:
     assert msg.sender == self.owner
     assert target != ZERO_ADDRESS, "Cannot add null address as minter"
