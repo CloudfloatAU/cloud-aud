@@ -167,6 +167,19 @@ def addBurner(target: address) -> bool:
 
 
 @external
+def removeBurner(target: address) -> bool:
+    """
+    @notice Function to remove burner role to targeted address.
+    @param target Address to have token burner role removed.
+    @return A boolean that indicates if the operation was successful.
+    """
+    assert msg.sender == self.owner, "Access is denied."
+    assert self.isBurner[target] == True, "Targeted address is not a burner"
+    self.isBurner[target] = False
+    return True
+
+
+@external
 def addMinter(target: address) -> bool:
     assert msg.sender == self.owner
     assert target != ZERO_ADDRESS, "Cannot add null address as minter"
