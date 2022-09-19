@@ -7,8 +7,6 @@ plugins:
 default_ecosystem: ethereum
 
 ethereum:
-  # default to ropsten to avoid deploying on mainnet by accident and spend funds
-  default_network: ropsten
   ropsten:
     default_provider: geth
   rinkeby:
@@ -16,7 +14,7 @@ ethereum:
   goerli:
     default_provider: geth
   mainnet:
-    default_provider: get
+    default_provider: geth
 
 geth:
   ethereum:

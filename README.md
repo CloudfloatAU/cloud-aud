@@ -31,10 +31,7 @@ To compile and deploy the contract, run:
 
 ```shell
 ape compile
-ape run scripts/deploy.py  # this will default to ethereum's ropsten test network
-
-# you can also specify a network:
-ape run scripts/deploy.py --network ethereum:goerli:geth
+ape run scripts/deploy.py --network ethereum:ropsten:infura
 ```
 
 *A funded account is required to deploy the contract.*
