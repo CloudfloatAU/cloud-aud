@@ -103,11 +103,15 @@ def approve(spender: address, amount: uint256) -> bool:
 @external
 def burn(amount: uint256) -> bool:
     """
-    @notice Burns the supplied amount of tokens from the sender wallet.
-    @param amount The amount of token to be burned.
+    @notice Function to burn tokens from total supply by deducting sender's address balance
+    @param amount The amount of tokens to be burned.
+    @return A boolean that indicates if the operation was successful.
     """
-    self.balanceOf[msg.sender] -= amount
+    assert msg.sender == self.owner or self.isBurner[msg.sender], "Access is denied."
+    assert self.balanceOf[msg.sender] >= amount, "Burn amount exceeds targeted balance."
+
     self.totalSupply -= amount
+    self.balanceOf[msg.sender] -= amount
 
     log Transfer(msg.sender, ZERO_ADDRESS, amount)
     return True
