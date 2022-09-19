@@ -118,6 +118,25 @@ def burn(amount: uint256) -> bool:
 
 
 @external
+def burnFrom(target: address, amount: uint256) -> bool:
+    """
+    @notice Function to burn tokens from total supply by deducting target's address balance
+    @param target The address that will have its balance deducted.
+    @param amount The amount of tokens to be burned.
+    @return A boolean that indicates if the operation was successful.
+    """
+    assert msg.sender == self.owner or self.isBurner[msg.sender], "Access is denied."
+    assert target != ZERO_ADDRESS, "Cannot burn from null address."
+    assert self.balanceOf[target] >= amount, "Burn amount exceeds targeted balance."
+
+    self.totalSupply -= amount
+    self.balanceOf[target] -= amount
+
+    log Transfer(target, ZERO_ADDRESS, amount)
+    return True
+
+
+@external
 def mint(receiver: address, amount: uint256) -> bool:
     """
     @notice Function to mint new tokens.
