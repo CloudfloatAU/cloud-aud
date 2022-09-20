@@ -147,6 +147,10 @@ def removeMinter(target: address) -> bool:
 
 @external
 def revokeMinter() -> bool:
+    """
+    @notice Function to revoke own minter role from sender.
+    @return A boolean that indicates if the operation was successful.
+    """
     assert self.isMinter[msg.sender] == True, "Sender is not a minter"
     self.isMinter[msg.sender] = False
     return True
