@@ -2,7 +2,7 @@ name: Cloud AUD
 
 plugins:
   - name: vyper
-  - name: infura
+  - name: optimism
 
 default_ecosystem: ethereum
 
@@ -16,6 +16,10 @@ ethereum:
   mainnet:
     default_provider: geth
 
+optimism:
+  mainnet:
+    default_provider: geth
+
 geth:
   ethereum:
     ropsten:
@@ -26,3 +30,9 @@ geth:
       uri: https://rpc.ankr.com/eth_goerli
     mainnet:
       uri: https://rpc.ankr.com/eth
+
+  optimism:
+    mainnet:
+      uri: https://rpc.ankr.com/optimism
+    testnet:
+      uri: https://rpc.ankr.com/optimism_testnet
