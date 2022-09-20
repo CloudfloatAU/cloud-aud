@@ -131,6 +131,11 @@ def mint(receiver: address, amount: uint256) -> bool:
 
 @external
 def addMinter(target: address) -> bool:
+    """
+    @notice Function to grant minter role to targeted address.
+    @param target Address to have token minter role granted.
+    @return A boolean that indicates if the operation was successful.
+    """
     assert msg.sender == self.owner
     assert target != ZERO_ADDRESS, "Cannot add null address as minter"
     self.isMinter[target] = True
