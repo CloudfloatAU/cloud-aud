@@ -144,6 +144,11 @@ def addMinter(target: address) -> bool:
 
 @external
 def removeMinter(target: address) -> bool:
+    """
+    @notice Function to remove minter role to targeted address.
+    @param target Address to have token minter role removed.
+    @return A boolean that indicates if the operation was successful.
+    """
     assert msg.sender == self.owner
     assert self.isMinter[target] == True, "Targeted address is not a minter"
     self.isMinter[target] = False
