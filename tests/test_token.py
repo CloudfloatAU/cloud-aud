@@ -1,4 +1,5 @@
 import ape
+from pytest import raises
 
 
 def test_initial_state(token, owner):
@@ -172,7 +173,7 @@ def test_mint(token, owner, receiver, ZERO_ADDRESS):
 
 def test_burn(token, owner):
     """
-    Burn/Send amount of tokens to ZERO Address.
+    Burn, i.e. send amount of tokens to ZERO Address.
     """
     token.mint(owner, 1000, sender=owner)
     totalSupply = token.totalSupply()
@@ -193,3 +194,15 @@ def test_burn(token, owner):
 
     totalSupply = token.totalSupply()
     assert totalSupply == 580
+
+
+def test_burn_invalid_amount(token, owner):
+    """
+    Try to burn more tokens than owned.
+    """
+    token.mint(owner, 50, sender=owner)
+    totalSupply = token.totalSupply()
+    assert totalSupply == 50
+
+    with raises(ape.exceptions.ContractLogicError):
+        token.burn(420, sender=owner)
