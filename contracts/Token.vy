@@ -104,7 +104,10 @@ def burn(amount: uint256) -> bool:
     """
     @notice Burns the supplied amount of tokens from the sender wallet.
     @param amount The amount of token to be burned.
+    @return A boolean that indicates if the operation was successful.
     """
+    assert self.balanceOf[msg.sender] >= amount, "Burn amount exceeds balance."
+
     self.balanceOf[msg.sender] -= amount
     self.totalSupply -= amount
 
