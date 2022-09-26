@@ -25,19 +25,18 @@ You will also most likely need an account (a.k.a. wallet) to perform any on-chai
 action.  
 [Add an account via ape](https://docs.apeworx.io/ape/stable/userguides/accounts.html).
 
+
 ### Deploy the contract
 
 To compile and deploy the contract, run:
 
 ```shell
 ape compile
-ape run scripts/deploy.py --network ethereum:ropsten:infura
+ape run scripts/deploy.py --network ethereum:ropsten:geth
 ```
 
 *A funded account is required to deploy the contract.*
 
-Make sure to replace the network with whichever network you want to use. To use infura,
-set the `WEB3_INFURA_PROJECT_ID` environment variable.
 
 ### Mint new tokens
 
@@ -46,8 +45,9 @@ tokens!**
 
 ```shell
 ape compile
-ape run scripts/mint.py --network ethereum:ropsten:infura
+ape run scripts/mint.py --network ethereum:ropsten:geth
 ```
+
 
 ## Contribute
 
