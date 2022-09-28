@@ -1,0 +1,29 @@
+name: Build docs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build the docs with Sphinx
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs
+    steps:
+      # clone repo and check out
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Install dependencies 💾
+        run: pip install -r requirements.txt
+
+      - name: Build 🔧
+        run: make html && touch _build/html/.nojekyll
+
+      - name: Deploy to GitHub pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+            folder: /home/runner/work/cloud-aud/cloud-aud/docs/_build/html

@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="cloudfloat.png" style="height: 50px; width: 50px;">
+  <img src="https://github.com/CloudfloatAU/cloud-aud/raw/main/cloudfloat.png" style="height: 50px; width: 50px; border-radius: 10px; margin-top: 20px;">
   <h1>Cloud AUD</h1>
   <p>Cloud AUD (<b>CAUD</b>) is an interest-bearing stablecoin redeemable one to one for Australian Dollar.</p>
   <p>Generated from <a href="https://github.com/ApeAcademy/token-template">token-template</a> by <a href="https://academy.apeworx.io">Ape Academy</a>.</p>
