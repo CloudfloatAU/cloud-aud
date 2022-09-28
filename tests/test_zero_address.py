@@ -1,4 +1,3 @@
-#!/usr/bin/env python3.8
 import ape
 import pytest
 
@@ -19,7 +18,7 @@ def test_transfer_to_zero_address(token, owner, ZERO_ADDRESS):
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
         token.transfer(receiver, 100, sender=owner)
 
-    assert exc_info.value.args[0] == "Cannot transfer to null address"
+    assert exc_info.value.args[0] == "Cannot transfer to null address."
 
 
 def test_transfer_from_to_zero_address(token, owner, accounts, ZERO_ADDRESS):
@@ -54,4 +53,4 @@ def test_transfer_from_to_zero_address(token, owner, accounts, ZERO_ADDRESS):
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
         tx = token.transferFrom(owner, receiver, 200, sender=spender)
 
-    assert exc_info.value.args[0] == "Cannot transfer to null address"
+    assert exc_info.value.args[0] == "Cannot transfer to null address."

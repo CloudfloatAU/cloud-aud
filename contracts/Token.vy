@@ -16,10 +16,12 @@ NAME: constant(String[20]) = "Cloud AUD"
 SYMBOL: constant(String[5]) = "CAUD"
 DECIMALS: constant(uint8) = 8
 
+
 # ERC20 State Variables
 totalSupply: public(uint256)
 balanceOf: public(HashMap[address, uint256])
 allowance: public(HashMap[address, HashMap[address, uint256]])
+
 
 # Events
 event Transfer:
@@ -31,6 +33,11 @@ event Approval:
     owner: indexed(address)
     spender: indexed(address)
     amount: uint256
+
+event OwnershipTransfer:
+    previousOwner: indexed(address)
+    newOwner: indexed(address)
+
 
 owner: public(address)
 isMinter: public(HashMap[address, bool])
@@ -62,7 +69,7 @@ def decimals() -> uint8:
 
 @external
 def transfer(receiver: address, amount: uint256) -> bool:
-    assert receiver != ZERO_ADDRESS, "Cannot transfer to null address"
+    assert receiver != ZERO_ADDRESS, "Cannot transfer to null address."
     self.balanceOf[msg.sender] -= amount
     self.balanceOf[receiver] += amount
 
@@ -78,7 +85,7 @@ def transferFrom(sender: address, receiver: address, amount: uint256) -> bool:
         behalf. For example a decentralized exchange would make use of this method,
         once given authorization via the approve method.
     """
-    assert receiver != ZERO_ADDRESS, "Cannot transfer to null address"
+    assert receiver != ZERO_ADDRESS, "Cannot transfer to null address."
     self.allowance[sender][msg.sender] -= amount
     self.balanceOf[sender] -= amount
     self.balanceOf[receiver] += amount
@@ -123,7 +130,7 @@ def mint(receiver: address, amount: uint256) -> bool:
     @param amount The amount of tokens to mint.
     @return A boolean that indicates if the operation was successful.
     """
-    assert msg.sender == self.owner or self.isMinter[msg.sender], "Access is denied."
+    assert msg.sender == self.owner or self.isMinter[msg.sender], "Access denied."
 
     self.totalSupply += amount
     self.balanceOf[receiver] += amount
@@ -140,7 +147,7 @@ def addMinter(target: address) -> bool:
     @return A boolean that indicates if the operation was successful.
     """
     assert msg.sender == self.owner
-    assert target != ZERO_ADDRESS, "Cannot add null address as minter"
+    assert target != ZERO_ADDRESS, "Cannot add null address as minter."
     self.isMinter[target] = True
     return True
 
@@ -152,7 +159,25 @@ def removeMinter(target: address) -> bool:
     @param target Address to have token minter role removed.
     @return A boolean that indicates if the operation was successful.
     """
-    assert msg.sender == self.owner
-    assert self.isMinter[target] == True, "Targeted address is not a minter"
+    assert msg.sender == self.owner, "Access denied."
+    assert self.isMinter[target] == True, "Targeted address is not a minter."
     self.isMinter[target] = False
+    return True
+
+
+@external
+def transferOwnership(target: address) -> bool:
+    """
+    @notice Function to transfer ownership from one address to another.
+    @param target Address of the new owner.
+    @return A boolean that indicates if the operation was successful.
+    """
+    assert msg.sender == self.owner, "Access denied."
+    assert target != ZERO_ADDRESS, "Cannot add null address as owner."
+
+    # revoke owner's minting role as well
+    self.isMinter[self.owner] = False
+    self.owner = target
+
+    log OwnershipTransfer(msg.sender, target)
     return True
