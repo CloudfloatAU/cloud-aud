@@ -3,7 +3,7 @@ name: Build docs
 on:
   push:
     branches:
-      - docs  # just testing with the docs branch
+      - main
 
 jobs:
   build:
