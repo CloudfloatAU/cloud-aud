@@ -1,0 +1,29 @@
+name: Build docs
+
+on:
+  push:
+    branches:
+      - docs  # just testing with the docs branch
+
+jobs:
+  build:
+    name: Build the docs with Sphinx
+    runs-on: ubuntu-latest
+    steps:
+      # clone repo and check out
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      # change working directory
+      - run: cd docs/
+
+      - name: Install dependencies 💾
+        run: pip install -r requirements.txt
+
+      - name: Build 🔧
+        run: make html
+
+      - name: Deploy to GitHub pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+            folder: _build
