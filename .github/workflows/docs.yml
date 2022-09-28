@@ -21,9 +21,9 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Build 🔧
-        run: make html
+        run: make html && pwd
 
       - name: Deploy to GitHub pages 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-            folder: _build
+            folder: /home/runner/work/cloud-aud/cloud-aud/docs/_build/html
