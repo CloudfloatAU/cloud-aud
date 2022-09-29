@@ -1,4 +1,3 @@
-#!/usr/bin/env python3.8
 import ape
 import pytest
 
@@ -22,7 +21,7 @@ def test_add_minter_targeting_zero_address(token, owner, ZERO_ADDRESS):
     target = ZERO_ADDRESS
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
         token.addMinter(target, sender=owner)
-    assert exc_info.value.args[0] == "Cannot add null address as minter"
+    assert exc_info.value.args[0] == "Cannot add null address as minter."
 
 
 def test_remove_minter(token, owner, accounts):
@@ -45,7 +44,7 @@ def test_remove_minter_targeting_non_minter(token, owner, accounts):
     target = accounts[1]
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
         token.removeMinter(target, sender=owner)
-    assert exc_info.value.args[0] == "Targeted address is not a minter"
+    assert exc_info.value.args[0] == "Targeted address is not a minter."
 
 
 def test_remove_minter_targeting_already_removed(token, owner, accounts):
@@ -60,7 +59,7 @@ def test_remove_minter_targeting_already_removed(token, owner, accounts):
     assert token.isMinter(target) == False
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
         token.removeMinter(target, sender=owner)
-    assert exc_info.value.args[0] == "Targeted address is not a minter"
+    assert exc_info.value.args[0] == "Targeted address is not a minter."
 
 
 def test_remove_minter_targeting_zero_address(token, owner, ZERO_ADDRESS):
@@ -71,4 +70,4 @@ def test_remove_minter_targeting_zero_address(token, owner, ZERO_ADDRESS):
     target = ZERO_ADDRESS
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
         token.removeMinter(target, sender=owner)
-    assert exc_info.value.args[0] == "Targeted address is not a minter"
+    assert exc_info.value.args[0] == "Targeted address is not a minter."
