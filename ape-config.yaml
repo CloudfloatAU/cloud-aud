@@ -2,7 +2,7 @@ name: Cloud AUD
 
 plugins:
   - name: vyper
-  - name: optimism
+  - name: polygon
 
 default_ecosystem: ethereum
 
@@ -16,7 +16,7 @@ ethereum:
   mainnet:
     default_provider: geth
 
-optimism:
+polygon:
   mainnet:
     default_provider: geth
 
@@ -31,8 +31,8 @@ geth:
     mainnet:
       uri: https://rpc.ankr.com/eth
 
-  optimism:
+  polygon:
     mainnet:
-      uri: https://rpc.ankr.com/optimism
-    testnet:
-      uri: https://rpc.ankr.com/optimism_testnet
+      uri: https://rpc.ankr.com/polygon
+    mumbai:
+      uri: https://rpc.ankr.com/polygon_mumbai
