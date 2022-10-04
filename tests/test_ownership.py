@@ -5,7 +5,8 @@ import pytest
 
 def test_transfer_ownership(token, owner, receiver):
     """
-    Test transferring ownership from one address to another.
+    Test transferring ownership from owner address to another then mint by original owner address.
+    Must trigger an ape.exceptions.ContractLogicError when minting post ownership transfer
     """
     assert token.owner() == owner
     token.mint(owner, 1000, sender=owner)
