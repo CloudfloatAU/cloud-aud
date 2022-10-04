@@ -17,6 +17,11 @@ SYMBOL: constant(String[5]) = "CAUD"
 DECIMALS: constant(uint8) = 8
 
 
+MIN_GAS_REMAINING: constant(uint256) = 1000     # This needs to be some siginificantly higher number.
+MAX_PAYMENTS: constant(uint256) = 200           # Max size of batchTransfer payment batches.
+EST_GAS_PER_TRANSFER: constant(uint256) = 20000 # Initial estimate of the cost for a single payment transfer.
+
+
 # ERC20 State Variables
 totalSupply: public(uint256)
 balanceOf: public(HashMap[address, uint256])
@@ -37,6 +42,9 @@ event Approval:
 event OwnershipTransfer:
     previousOwner: indexed(address)
     newOwner: indexed(address)
+
+event GasRemaining:
+    gas_remaining: indexed(uint256)
 
 
 owner: public(address)
@@ -69,12 +77,62 @@ def decimals() -> uint8:
 
 @external
 def transfer(receiver: address, amount: uint256) -> bool:
+    # Display msg.gas here to see what we start with.
+    log GasRemaining(msg.gas)
+
     assert receiver != ZERO_ADDRESS, "Cannot transfer to null address."
     self.balanceOf[msg.sender] -= amount
     self.balanceOf[receiver] += amount
 
     log Transfer(msg.sender, receiver, amount)
+
+    # Display msg.gas here to see what we end with.
+    log GasRemaining(msg.gas)
+
     return True
+
+
+struct Payment:
+    receiver: address
+    amount: uint256
+    
+
+@external
+def batchTransfer(payments: DynArray[Payment, MAX_PAYMENTS], min_gas_remaining: uint256 = MIN_GAS_REMAINING) -> uint256:
+    pay_count: uint256 = 0
+    pay_value: uint256 = 0
+    per_transfer_cost: uint256 = EST_GAS_PER_TRANSFER
+    initial_gas_remaining : uint256 = msg.gas
+    gas_exhausted: bool = False
+
+    for payment in payments:
+
+        # Break if we don't have sufficient gas.
+        if msg.gas < (min_gas_remaining + per_transfer_cost): 
+            gas_exhausted = True
+            break
+
+        # We're complete if any receiver is a zero address.
+        if payment.receiver == ZERO_ADDRESS: break
+
+        self.balanceOf[msg.sender] -= payment.amount
+        self.balanceOf[payment.receiver] += payment.amount
+
+        log Transfer(msg.sender, payment.receiver, payment.amount)
+
+        pay_count += 1
+        pay_value += payment.amount
+
+        if per_transfer_cost == EST_GAS_PER_TRANSFER:
+            per_transfer_cost = initial_gas_remaining - msg.gas
+    
+    # Log the batch event here.
+
+    return pay_count
+
+
+
+
 
 
 @external

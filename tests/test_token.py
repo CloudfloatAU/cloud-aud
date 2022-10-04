@@ -60,7 +60,12 @@ def test_transfer(token, owner, receiver):
 
     # NOTE: Transfers of 0 values MUST be treated as normal transfers
     # and trigger a Transfer event.
-    tx = token.transfer(owner, 0, sender=owner)
+    tx = token.transfer(owner, 0, sender=owner, max_fee="1000 gwei", max_priority_fee="1000 gwei")
+
+    print("test_transfer print happened!")
+    logs = list(tx.decode_logs(token.GasRemaining))
+    for ev in logs:
+        print("GasRemaining = %s." % ev.gas_remaining)
 
 
 def test_transfer_from(token, owner, accounts):
