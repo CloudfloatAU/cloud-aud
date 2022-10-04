@@ -13,9 +13,17 @@ def test_transfer_ownership(token, owner, receiver):
     assert token.balanceOf(owner) == 1000
 
     # transfer ownership to received
-    token.transferOwnership(receiver, sender=owner)
+    receipt = token.transferOwnership(receiver, sender=owner)
     assert token.owner() != owner
     assert token.owner() == receiver
+
+    # ensure OwnershipTransfer event was emitted
+    logs = receipt.decode_logs(token.OwnershipTransfer)
+    assert len(list(logs)) == 1
+    for log in logs:
+        assert log.previousOwner == owner
+        assert log.newOwner == receiver
+    del logs, receipt
 
     # test that owner can no longer mint
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
