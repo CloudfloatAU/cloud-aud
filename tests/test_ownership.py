@@ -26,6 +26,7 @@ def test_transfer_ownership(token, owner, receiver):
     token.mint(receiver, 101, sender=receiver)
     assert token.balanceOf(receiver) == 101
 
+
 def test_transfer_ownership_by_non_owner(token, owner, receiver):
     """
     Test transferring ownership from non-owner to owner address.
@@ -36,10 +37,15 @@ def test_transfer_ownership_by_non_owner(token, owner, receiver):
     token.mint(owner, 1000, sender=owner)
     assert token.balanceOf(owner) == 1000
 
+    ### Attempt to transfer ownership ###
+    non_owner = receiver
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
-        token.transferOwnership(owner, sender=receiver)
+        token.transferOwnership(owner, sender=non_owner)
     assert exc_info.value.args[0] == "Access denied."
+
+    ### Ownership remains unchanged ###
     assert token.owner() == owner
+
 
 def test_transfer_ownership_to_zero_address(token, owner, ZERO_ADDRESS):
     """
