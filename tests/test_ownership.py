@@ -40,3 +40,22 @@ def test_transfer_ownership_by_non_owner(token, owner, receiver):
         token.transferOwnership(owner, sender=receiver)
     assert exc_info.value.args[0] == "Access denied."
     assert token.owner() == owner
+
+def test_transfer_ownership_to_zero_address(token, owner, ZERO_ADDRESS):
+    """
+    Test transferring ownership of contract from original owner to a zero address.
+    Must trigger an ape.exceptions.ContractLogicError when trasferOwnership is called.
+    Contract owner must remain unchanged.
+    """
+    assert token.owner() == owner
+    token.mint(owner, 1000, sender=owner)
+    assert token.balanceOf(owner) == 1000
+
+    ### Attempt to transfer ownership ###
+    new_owner = ZERO_ADDRESS
+    with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
+        token.transferOwnership(new_owner, sender=owner)
+    assert exc_info.value.args[0] == "Cannot add null address as owner."
+
+    ### Ownership remains unchanged ###
+    assert token.owner() == owner
