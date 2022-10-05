@@ -17,8 +17,8 @@ SYMBOL: constant(String[5]) = "CAUD"
 DECIMALS: constant(uint8) = 8
 
 
-MIN_GAS_REMAINING: constant(uint256) = 30000     # This needs to be some siginificantly higher number.
-MAX_PAYMENTS: constant(uint256) = 200           # Max size of batchTransfer payment batches.
+MIN_GAS_REMAINING: constant(uint256) = 30000   # Use to reserve remaining gas in case calling from contract that needs to do more things.
+MAX_PAYMENTS: constant(uint256) = 200          # Max size of batchTransfer payment batches.
 EST_GAS_PER_TRANSFER: constant(uint256) = 6000 # Initial estimate of the cost for a single payment transfer.
 
 
@@ -49,7 +49,8 @@ event GasRemaining:
 event BatchTransfer:
     sender: indexed(address)
     tx_count: uint256
-    tx_value: uint256    
+    tx_value: uint256   
+    gas_per_tx: uint256 
     gas_exhausted : bool
 
 
@@ -133,7 +134,7 @@ def batchTransfer(payments: DynArray[Payment, MAX_PAYMENTS], min_gas_remaining: 
             per_transfer_cost = initial_gas_remaining - msg.gas
     
     # Log the batch event here.
-    log BatchTransfer(msg.sender, pay_count, pay_value, gas_exhausted)
+    log BatchTransfer(msg.sender, pay_count, pay_value, per_transfer_cost, gas_exhausted)
 
     return pay_count
 
