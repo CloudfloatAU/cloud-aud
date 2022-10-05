@@ -68,8 +68,35 @@ def test_transfer(token, owner, receiver):
         print("GasRemaining = %s." % ev.gas_remaining)
 
 def test_batch_transfer(token, owner, accounts):
-    pass
+    token.mint(owner, 1000, sender=owner)
+    payments = [];
+    for i in range(10):
+        payments.append((accounts[i],1))
 
+    tx = token.batchTransfer(payments, sender=owner, gas='1000000')
+
+    logs = list(tx.decode_logs(token.GasRemaining))
+    print("Logs[%s] = %s." %(len(logs),logs))
+
+    for l in logs:
+        print("%s" % l.gas_remaining)
+
+    logs = list(tx.decode_logs(token.Transfer))
+    print("Logs[%s] = %s." %(len(logs),logs))
+
+    logs = list(tx.decode_logs(token.BatchTransfer))
+    print("Logs[%s] = %s." %(len(logs),logs))
+
+    event = logs[0]
+
+    print("GasExhausted = %s." % event.gas_exhausted)
+    print("GasPerTx = %s." % event.gas_per_tx)
+    assert event.gas_exhausted == False
+    assert event.tx_count == 10
+    assert event.tx_value == 10
+
+    #assert tx.return_value == 10
+    assert tx.ran_out_of_gas == False
 
 def test_transfer_from(token, owner, accounts):
     """

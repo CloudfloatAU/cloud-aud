@@ -109,8 +109,10 @@ def batchTransfer(payments: DynArray[Payment, MAX_PAYMENTS], min_gas_remaining: 
     pay_count: uint256 = 0
     pay_value: uint256 = 0
     per_transfer_cost: uint256 = EST_GAS_PER_TRANSFER
-    initial_gas_remaining : uint256 = msg.gas
+    gas_remaining : uint256 = msg.gas
     gas_exhausted: bool = False
+
+    log GasRemaining(msg.gas)
 
     for payment in payments:
 
@@ -125,16 +127,23 @@ def batchTransfer(payments: DynArray[Payment, MAX_PAYMENTS], min_gas_remaining: 
         self.balanceOf[msg.sender] -= payment.amount
         self.balanceOf[payment.receiver] += payment.amount
 
+        log GasRemaining(msg.gas)
+
         log Transfer(msg.sender, payment.receiver, payment.amount)
 
         pay_count += 1
         pay_value += payment.amount
 
         if per_transfer_cost == EST_GAS_PER_TRANSFER:
-            per_transfer_cost = initial_gas_remaining - msg.gas
+            per_transfer_cost = gas_remaining - msg.gas
+        if per_transfer_cost < gas_remaining - msg.gas:
+            per_transfer_cost = gas_remaining - msg.gas
+        gas_remaining = msg.gas
     
     # Log the batch event here.
     log BatchTransfer(msg.sender, pay_count, pay_value, per_transfer_cost, gas_exhausted)
+
+    log GasRemaining(msg.gas)
 
     return pay_count
 
