@@ -17,9 +17,9 @@ SYMBOL: constant(String[5]) = "CAUD"
 DECIMALS: constant(uint8) = 8
 
 
-MIN_GAS_REMAINING: constant(uint256) = 1000     # This needs to be some siginificantly higher number.
+MIN_GAS_REMAINING: constant(uint256) = 30000     # This needs to be some siginificantly higher number.
 MAX_PAYMENTS: constant(uint256) = 200           # Max size of batchTransfer payment batches.
-EST_GAS_PER_TRANSFER: constant(uint256) = 20000 # Initial estimate of the cost for a single payment transfer.
+EST_GAS_PER_TRANSFER: constant(uint256) = 6000 # Initial estimate of the cost for a single payment transfer.
 
 
 # ERC20 State Variables
@@ -45,6 +45,12 @@ event OwnershipTransfer:
 
 event GasRemaining:
     gas_remaining: indexed(uint256)
+
+event BatchTransfer:
+    sender: indexed(address)
+    tx_count: uint256
+    tx_value: uint256    
+    gas_exhausted : bool
 
 
 owner: public(address)
@@ -127,12 +133,9 @@ def batchTransfer(payments: DynArray[Payment, MAX_PAYMENTS], min_gas_remaining: 
             per_transfer_cost = initial_gas_remaining - msg.gas
     
     # Log the batch event here.
+    log BatchTransfer(msg.sender, pay_count, pay_value, gas_exhausted)
 
     return pay_count
-
-
-
-
 
 
 @external
