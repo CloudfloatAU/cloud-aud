@@ -188,7 +188,39 @@ def test_batch_transfer_insufficient_funds(token, owner, accounts):
 
 
 def test_batch_transfer_aborts_when_hits_zero_address(token, owner, accounts):
-    pass        
+    token.mint(owner, 1000, sender=owner)
+    payments = [];
+    for i in range(9):
+        payments.append((accounts[i+1],1))
+
+    # Change the 4th tx to go to address 0.
+    payments[3] = ("0x0000000000000000000000000000000000000000",1)
+
+    tx = token.batchTransfer(payments, sender=owner, gas='1000000')
+    assert tx.failed == False
+
+    logs = list(tx.decode_logs(token.GasRemaining))
+    print("Logs[%s] = %s." %(len(logs),logs))
+
+    for l in logs:
+        print("%s" % l.gas_remaining)
+
+    logs = list(tx.decode_logs(token.Transfer))
+    print("Logs[%s] = %s." %(len(logs),logs))
+
+    logs = list(tx.decode_logs(token.BatchTransfer))
+    print("Logs[%s] = %s." %(len(logs),logs))
+
+    event = logs[0]
+
+    print("GasExhausted = %s." % event.gas_exhausted)
+    print("GasPerTx = %s." % event.gas_per_tx)
+    assert event.gas_exhausted == False
+    assert event.tx_count == 3
+    assert event.tx_value == 3
+
+    #assert tx.return_value == 10
+    assert tx.ran_out_of_gas == False     
 
 
 def test_transfer_from(token, owner, accounts):
