@@ -74,6 +74,7 @@ def test_batch_transfer(token, owner, accounts):
         payments.append((accounts[i],1))
 
     tx = token.batchTransfer(payments, sender=owner, gas='1000000')
+    assert tx.failed == False
 
     logs = list(tx.decode_logs(token.GasRemaining))
     print("Logs[%s] = %s." %(len(logs),logs))
@@ -97,6 +98,97 @@ def test_batch_transfer(token, owner, accounts):
 
     #assert tx.return_value == 10
     assert tx.ran_out_of_gas == False
+
+
+def test_batch_transfer_exhaust_min_gas_remaining(token, owner, accounts):
+    token.mint(owner, 1000, sender=owner)
+    payments = [];
+    for i in range(10):
+        payments.append((accounts[i],1))
+
+    # Token.vy assumptions:
+    # MIN_GAS_REMAINING == 30,000
+    # EST_GAS_PER_TRANSFER == 29000
+
+    # 40,000 gas will get the tx started but abort on the first one.
+    tx = token.batchTransfer(payments, sender=owner, gas='40000')
+    assert tx.failed == False
+
+    logs = list(tx.decode_logs(token.BatchTransfer))
+
+    assert logs[0].gas_exhausted == True 
+    assert logs[0].tx_count == 0 
+    assert logs[0].tx_value == 0
+
+    logs = list(tx.decode_logs(token.Transfer))
+    assert len(logs) == 0
+
+    assert tx.ran_out_of_gas == False
+
+
+def test_batch_transfer_partial_batch_only(token, owner, accounts):
+    token.mint(owner, 1000, sender=owner)
+    payments = [];
+    for i in range(10):
+        payments.append((accounts[i],1))
+
+    # Token.vy assumptions:
+    # MIN_GAS_REMAINING == 30,000
+    # EST_GAS_PER_TRANSFER == 29000
+
+    # 90,000 gas will get the tx started but abort after the second one.
+    tx = token.batchTransfer(payments, sender=owner, gas='90000')
+    assert tx.failed == False    
+
+    logs = list(tx.decode_logs(token.BatchTransfer))
+
+    assert logs[0].gas_exhausted == True 
+    assert logs[0].tx_count == 2
+    assert logs[0].tx_value == 2
+
+    logs = list(tx.decode_logs(token.Transfer))
+    assert len(logs) == 2
+
+    assert tx.ran_out_of_gas == False
+
+
+def test_batch_transfer_insufficient_funds(token, owner, accounts):
+
+    # owner only has two tokens to transfer! Should only complete one tx.
+    token.mint(owner, 2, sender=owner)
+    payments = [];
+    for i in range(10):
+        payments.append((accounts[i],2))
+
+    # Token.vy assumptions:
+    # MIN_GAS_REMAINING == 30,000
+    # EST_GAS_PER_TRANSFER == 29000
+
+    print("Owner balance: %s." % token.balanceOf(owner))
+
+    tx = token.batchTransfer(payments, sender=owner, gas='10000000')
+    
+    assert tx.failed == False    
+
+    logs = list(tx.decode_logs(token.BatchTransfer))
+
+    print("BatchTransfer logs: %s", logs)
+    assert logs[0].gas_exhausted == False
+    #assert logs[0].tx_count == 1
+    #assert logs[0].tx_value == 2
+
+    logs = list(tx.decode_logs(token.Transfer))
+    #assert len(logs) == 1
+    print("Transfer Logs[%s] = %s." %(len(logs),logs))
+
+    print("Owner balance: %s." % token.balanceOf(owner))
+
+    assert tx.ran_out_of_gas == False
+
+
+def test_batch_transfer_aborts_when_hits_zero_address(token, owner, accounts):
+    pass        
+
 
 def test_transfer_from(token, owner, accounts):
     """
