@@ -68,6 +68,7 @@ def test_transfer(token, owner, receiver):
         print("GasRemaining = %s." % ev.gas_remaining)
 
 def test_batch_transfer(token, owner, accounts):
+    # TODO - check pre/post tx balances for all accounts.
     token.mint(owner, 1000, sender=owner)
     payments = [];
     for i in range(9):
@@ -186,6 +187,10 @@ def test_batch_transfer_insufficient_funds(token, owner, accounts):
 
     assert tx.ran_out_of_gas == False
 
+
+def test_batch_larger_than_max_size(token, owner, accounts):
+    pass
+    
 
 def test_batch_transfer_aborts_when_hits_zero_address(token, owner, accounts):
     token.mint(owner, 1000, sender=owner)
