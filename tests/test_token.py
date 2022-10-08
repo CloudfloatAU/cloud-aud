@@ -189,7 +189,28 @@ def test_batch_transfer_insufficient_funds(token, owner, accounts):
 
 
 def test_batch_larger_than_max_size(token, owner, accounts):
-    pass
+    token.mint(owner, 1000, sender=owner)
+
+
+    # Assumes MAX_PAYMENTS == 200
+    payments = []
+    for i in range(201):
+        payments.append((accounts[(i%9)+1],1))
+
+    #with ape.reverts():
+    tx = token.batchTransfer(payments, sender=owner, gas='1000000')
+    
+    assert tx.failed == True
+
+    #print(token.raise_for_status())
+
+    #logs = list(tx.decode_logs(token.Transfer))
+    #print("Logs[%s] = %s." %(len(logs),logs))
+    #print("%s transfers!" % len(logs))
+
+    #logs = list(tx.decode_logs(token.BatchTransfer))
+    #print("Logs[%s] = %s." %(len(logs),logs))   
+
 
 
 def test_batch_transfer_aborts_when_hits_zero_address(token, owner, accounts):
