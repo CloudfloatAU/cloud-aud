@@ -190,7 +190,7 @@ def test_batch_transfer_insufficient_funds(token, owner, accounts):
 
 def test_batch_larger_than_max_size(token, owner, accounts):
     pass
-    
+
 
 def test_batch_transfer_aborts_when_hits_zero_address(token, owner, accounts):
     token.mint(owner, 1000, sender=owner)

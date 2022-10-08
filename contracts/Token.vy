@@ -128,7 +128,7 @@ def batchTransfer(payments: DynArray[Payment, MAX_PAYMENTS], min_gas_remaining: 
         if payment.receiver == ZERO_ADDRESS: break
 
         # End if insufficient funds remaining during the batch.
-        if self.balanceOf[msg.sender] < payment.amount: break
+        if owner_balance < payment.amount: break
 
         # If sender & receiver are different addresses then do the math.
         if msg.sender != payment.receiver:
