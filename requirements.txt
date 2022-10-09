@@ -1,2 +1,3 @@
-eth-ape # ==0.5.1
+eth-ape @ git+https://github.com/ApeWorX/ape.git#egg=eth-ape
+# eth-ape==0.5.1
 pytest
