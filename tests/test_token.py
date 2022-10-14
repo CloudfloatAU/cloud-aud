@@ -67,6 +67,7 @@ def test_transfer(token, owner, receiver):
     for ev in logs:
         print("GasRemaining = %s." % ev.gas_remaining)
 
+
 def test_batch_transfer(token, owner, accounts):
     token.mint(owner, 1000, sender=owner)
     payments = []
@@ -106,7 +107,6 @@ def test_batch_transfer(token, owner, accounts):
     assert event.tx_count == 9
     assert event.tx_value == 9
 
-    #assert tx.return_value == 10
     assert tx.ran_out_of_gas == False
 
 
@@ -164,16 +164,11 @@ def test_batch_transfer_partial_batch_only(token, owner, accounts):
 
 
 def test_batch_transfer_insufficient_funds(token, owner, accounts):
-
     # owner only has two tokens to transfer! Should only complete one tx.
     token.mint(owner, 2, sender=owner)
     payments = [];
     for i in range(9):
         payments.append((accounts[i+1],2))
-
-    # Token.vy assumptions:
-    # MIN_GAS_REMAINING == 30,000
-    # EST_GAS_PER_TRANSFER == 29000
 
     print("Owner balance: %s." % token.balanceOf(owner))
 
@@ -200,12 +195,10 @@ def test_batch_transfer_insufficient_funds(token, owner, accounts):
 def test_batch_larger_than_max_size(token, owner, accounts):
     token.mint(owner, 1000, sender=owner)
 
-
     # Assumes MAX_PAYMENTS == 200
     payments = []
     for i in range(201):
         payments.append((accounts[(i%9)+1],1))
-
 
     #with ape.reverts():
     tx = token.batchTransfer(payments, sender=owner, gas='1000000')
@@ -220,7 +213,6 @@ def test_batch_larger_than_max_size(token, owner, accounts):
 
     #logs = list(tx.decode_logs(token.BatchTransfer))
     #print("Logs[%s] = %s." %(len(logs),logs))   
-
 
 
 def test_batch_transfer_aborts_when_hits_zero_address(token, owner, accounts):
@@ -255,7 +247,6 @@ def test_batch_transfer_aborts_when_hits_zero_address(token, owner, accounts):
     assert event.tx_count == 3
     assert event.tx_value == 3
 
-    #assert tx.return_value == 10
     assert tx.ran_out_of_gas == False     
 
 
