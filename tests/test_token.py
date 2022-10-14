@@ -197,6 +197,7 @@ def test_batch_larger_than_max_size(token, owner, accounts):
     for i in range(201):
         payments.append((accounts[(i%9)+1],1))
 
+
     #with ape.reverts():
     tx = token.batchTransfer(payments, sender=owner, gas='1000000')
     
@@ -247,6 +248,59 @@ def test_batch_transfer_aborts_when_hits_zero_address(token, owner, accounts):
 
     #assert tx.return_value == 10
     assert tx.ran_out_of_gas == False     
+
+
+def test_gas_savings_vs_token_transfer(token, owner, accounts):
+    token.mint(owner, 1000, sender=owner)
+
+    tx_transfer1 = token.transfer(accounts[1],1, sender=owner, gas='1000000')
+    tx_batch1 = token.batchTransfer([(accounts[2],1)], sender=owner, gas='1000000')
+
+    tx_transfer2 = token.transfer(accounts[3],1, sender=owner, gas='1000000')
+    tx_batch2 = token.batchTransfer([(accounts[4],1),(accounts[5],1)], sender=owner, gas='1000000')
+
+    tx_transfer3 = token.transfer(accounts[6],1, sender=owner, gas='1000000')
+    tx_batch3 = token.batchTransfer([(accounts[7],1),(accounts[8],1), (accounts[9],1)], sender=owner, gas='1000000')
+
+    print("First Single tx: transfer: %s, batchTransfer:%s, delta:%s" % (tx_transfer1.gas_used, tx_batch1.gas_used, tx_transfer1.gas_used-tx_batch1.gas_used))
+    print("First Double tx: transfer: %s, batchTransfer:%s, delta:%s" % (tx_transfer1.gas_used + tx_transfer2.gas_used, tx_batch2.gas_used, (tx_transfer1.gas_used+tx_transfer2.gas_used)-tx_batch2.gas_used))
+    print("First Triple tx: transfer: %s, batchTransfer:%s, delta:%s" % (tx_transfer1.gas_used + tx_transfer2.gas_used + tx_transfer3.gas_used, tx_batch3.gas_used, (tx_transfer1.gas_used+tx_transfer2.gas_used+tx_transfer3.gas_used)-tx_batch3.gas_used))
+
+    assert tx_transfer1.failed==False
+    assert tx_transfer2.failed==False
+    assert tx_transfer3.failed==False
+    assert tx_batch1.failed==False
+    assert tx_batch2.failed==False
+    assert tx_batch3.failed==False
+
+    tx_transfer1 = token.transfer(accounts[1],1, sender=owner, gas='1000000')
+    tx_batch1 = token.batchTransfer([(accounts[2],1)], sender=owner, gas='1000000')
+
+    tx_transfer2 = token.transfer(accounts[3],1, sender=owner, gas='1000000')
+    tx_batch2 = token.batchTransfer([(accounts[4],1),(accounts[5],1)], sender=owner, gas='1000000')
+
+    tx_transfer3 = token.transfer(accounts[6],1, sender=owner, gas='1000000')
+    tx_batch3 = token.batchTransfer([(accounts[7],1),(accounts[8],1), (accounts[9],1)], sender=owner, gas='1000000')
+
+    print("Redo Single tx: transfer: %s, batchTransfer:%s, delta:%s" % (tx_transfer1.gas_used, tx_batch1.gas_used, tx_transfer1.gas_used-tx_batch1.gas_used))
+    print("Redo Double tx: transfer: %s, batchTransfer:%s, delta:%s" % (tx_transfer1.gas_used + tx_transfer2.gas_used, tx_batch2.gas_used, (tx_transfer1.gas_used+tx_transfer2.gas_used)-tx_batch2.gas_used))
+    print("Redo Triple tx: transfer: %s, batchTransfer:%s, delta:%s" % (tx_transfer1.gas_used + tx_transfer2.gas_used + tx_transfer3.gas_used, tx_batch3.gas_used, (tx_transfer1.gas_used+tx_transfer2.gas_used+tx_transfer3.gas_used)-tx_batch3.gas_used))
+
+    assert tx_transfer1.failed==False
+    assert tx_transfer2.failed==False
+    assert tx_transfer3.failed==False
+    assert tx_batch1.failed==False
+    assert tx_batch2.failed==False
+    assert tx_batch3.failed==False
+
+    payments = []
+    for i in range(100):
+        payments.append((accounts[(i%9)+1],1))
+
+    tx_batch100 = token.batchTransfer(payments, sender=owner, gas='1000000')
+    print("Redo 100x tx: transfer: %s, batchTransfer:%s, delta:%s" % (tx_transfer1.gas_used * 100, tx_batch100.gas_used, (tx_transfer1.gas_used*100)-tx_batch100.gas_used))
+
+    assert tx_batch100.failed==False
 
 
 def test_transfer_from(token, owner, accounts):

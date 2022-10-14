@@ -3,6 +3,7 @@ name: Cloud AUD
 plugins:
   - name: vyper
   - name: polygon
+  - name: geth
 
 default_ecosystem: ethereum
 

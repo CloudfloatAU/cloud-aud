@@ -85,17 +85,11 @@ def decimals() -> uint8:
 
 @external
 def transfer(receiver: address, amount: uint256) -> bool:
-    # Display msg.gas here to see what we start with.
-    log GasRemaining(msg.gas)
-
     assert receiver != ZERO_ADDRESS, "Cannot transfer to null address."
     self.balanceOf[msg.sender] -= amount
     self.balanceOf[receiver] += amount
 
     log Transfer(msg.sender, receiver, amount)
-
-    # Display msg.gas here to see what we end with.
-    log GasRemaining(msg.gas)
 
     return True
 
@@ -115,8 +109,6 @@ def batchTransfer(payments: DynArray[Payment, MAX_PAYMENTS], min_gas_remaining: 
 
     owner_balance : uint256 = self.balanceOf[msg.sender]
 
-    #log GasRemaining(msg.gas)
-
     for payment in payments:
 
         # Break if we don't have sufficient gas.
@@ -135,8 +127,6 @@ def batchTransfer(payments: DynArray[Payment, MAX_PAYMENTS], min_gas_remaining: 
             owner_balance -= payment.amount
             self.balanceOf[payment.receiver] += payment.amount
 
-        #log GasRemaining(msg.gas)
-
         log Transfer(msg.sender, payment.receiver, payment.amount)
 
         pay_count += 1
@@ -153,8 +143,6 @@ def batchTransfer(payments: DynArray[Payment, MAX_PAYMENTS], min_gas_remaining: 
     
     # Log the batch event here.
     log BatchTransfer(msg.sender, self.balanceOf[msg.sender], pay_count, pay_value, per_transfer_cost, gas_exhausted)
-
-    #log GasRemaining(msg.gas)
 
     return pay_count
 
