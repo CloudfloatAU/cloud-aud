@@ -68,14 +68,23 @@ def test_transfer(token, owner, receiver):
         print("GasRemaining = %s." % ev.gas_remaining)
 
 def test_batch_transfer(token, owner, accounts):
-    # TODO - check pre/post tx balances for all accounts.
     token.mint(owner, 1000, sender=owner)
-    payments = [];
+    payments = []
+
+    # Record starting balances of all accounts.
+    starting_balances = []
+    starting_balances.append(token.balanceOf(accounts[0]))
     for i in range(9):
         payments.append((accounts[i+1],1))
+        starting_balances.append(token.balanceOf(accounts[i+1]))
 
     tx = token.batchTransfer(payments, sender=owner, gas='1000000')
     assert tx.failed == False
+
+    # Compare pre/post tx balances for all accounts.
+    assert starting_balances[0] == token.balanceOf(accounts[0])+9 
+    for i in range(9):
+        assert starting_balances[i+1] == token.balanceOf(accounts[i+1])-1
 
     logs = list(tx.decode_logs(token.GasRemaining))
     print("Logs[%s] = %s." %(len(logs),logs))
