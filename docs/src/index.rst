@@ -12,4 +12,5 @@ Learn more
 .. toctree::
    :maxdepth: 2
 
-   hardware-wallets.md
+   user-guide/index.md
+   developer-guide/index.md
