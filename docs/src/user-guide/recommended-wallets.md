@@ -18,3 +18,15 @@ received.
 
 - [Website](https://rainbow.me)
 - [GitHub](https://github.com/rainbow-me/rainbow)
+
+
+### ![imToken](../_static/wallets/imToken.png) imToken
+
+This wallet supports a lot more networks. Good option if you want to hold multiple coins
+in the same wallet. You will need to import the **CAUD** token in order to see it.
+
+📲 available on: `iOS`, `Android`
+
+- [Website](https://token.im/?locale=en-US)
+- [GitHub](https://github.com/consenlabs/token-core) (only core)
+
