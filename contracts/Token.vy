@@ -43,9 +43,6 @@ event OwnershipTransfer:
     previousOwner: indexed(address)
     newOwner: indexed(address)
 
-event GasRemaining:
-    gas_remaining: indexed(uint256)
-
 event BatchTransfer:
     sender: indexed(address)
     sender_balance: uint256

@@ -62,11 +62,6 @@ def test_transfer(token, owner, receiver):
     # and trigger a Transfer event.
     tx = token.transfer(owner, 0, sender=owner, gas="200000", max_fee="1000 gwei", max_priority_fee="1000 gwei")
 
-    print("test_transfer print happened!")
-    logs = list(tx.decode_logs(token.GasRemaining))
-    for ev in logs:
-        print("GasRemaining = %s." % ev.gas_remaining)
-
 
 def test_batch_transfer(token, owner, accounts):
     token.mint(owner, 1000, sender=owner)
@@ -86,12 +81,6 @@ def test_batch_transfer(token, owner, accounts):
     assert starting_balances[0] == token.balanceOf(accounts[0])+9 
     for i in range(9):
         assert starting_balances[i+1] == token.balanceOf(accounts[i+1])-1
-
-    logs = list(tx.decode_logs(token.GasRemaining))
-    print("Logs[%s] = %s." %(len(logs),logs))
-
-    for l in logs:
-        print("%s" % l.gas_remaining)
 
     logs = list(tx.decode_logs(token.Transfer))
     print("Logs[%s] = %s." %(len(logs),logs))
@@ -226,12 +215,6 @@ def test_batch_transfer_aborts_when_hits_zero_address(token, owner, accounts):
 
     tx = token.batchTransfer(payments, sender=owner, gas='1000000')
     assert tx.failed == False
-
-    logs = list(tx.decode_logs(token.GasRemaining))
-    print("Logs[%s] = %s." %(len(logs),logs))
-
-    for l in logs:
-        print("%s" % l.gas_remaining)
 
     logs = list(tx.decode_logs(token.Transfer))
     print("Logs[%s] = %s." %(len(logs),logs))
