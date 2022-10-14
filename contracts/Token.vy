@@ -16,10 +16,10 @@ NAME: constant(String[20]) = "Cloud AUD"
 SYMBOL: constant(String[5]) = "CAUD"
 DECIMALS: constant(uint8) = 8
 
-
+# batchTransfer defaults for gas accounting.
 MIN_GAS_REMAINING: constant(uint256) = 30000    # Use to reserve remaining gas in case calling from contract that needs to do more things.
 MAX_PAYMENTS: constant(uint256) = 200           # Max size of batchTransfer payment batches.
-EST_GAS_PER_TRANSFER: constant(uint256) = 29000 # Initial estimate of the cost for a single payment transfer.
+EST_GAS_PER_TRANSFER: constant(uint256) = 35600 # Initial estimate of the cost for a single payment transfer.
 
 
 # ERC20 State Variables
@@ -94,11 +94,33 @@ def transfer(receiver: address, amount: uint256) -> bool:
     return True
 
 
+# Payment structure - compose an array of no more than MAX_PAYMENTS of these.
+#   Do not allow any receiver addresses to be 0 address as burns are not allowed.
 struct Payment:
     receiver: address
     amount: uint256
     
-
+# batchTransfer -   saves gas fees by batching multiple transfers from a single
+#                   address into one tx. Performs gas accounting to safely execute 
+#                   as many txs in the batch as possible without hitting gas exhaustion 
+#                   forcing a tx revert. 
+#
+#                   Publishes one Transfer event per payment processed.
+#
+#                   Publishes one BatchTransfer event at the end reporting the sending
+#                   wallet address, it's remaining balance, how many payments were transferred, 
+#                   the total value, the max per transfer gas, and whether or not the batch had 
+#                   left over payments due to gas exhaustion.
+#
+#                   In order to support gas-safe calls from other smart contracts, this function
+#                   takes a min_gas_remaining parameter so batchTransfer's gas accounting will 
+#                   ensure at least that qty of gas remains for any follow on functions that the 
+#                   calling contract may need to finish its own processing.
+#                   This saves client code from having to do lots of complex and non-deterministic
+#                   gas accounting of its own before sending batches. batchTransfer will attempt 
+#                   make as many payments from the batch as possible with the gas budget available.
+#                   It is up to the caller to manage resubmitting any payments that did not get 
+#                   processed in the initial batch.
 @external
 def batchTransfer(payments: DynArray[Payment, MAX_PAYMENTS], min_gas_remaining: uint256 = MIN_GAS_REMAINING) -> uint256:
     pay_count: uint256 = 0
@@ -127,6 +149,7 @@ def batchTransfer(payments: DynArray[Payment, MAX_PAYMENTS], min_gas_remaining: 
             owner_balance -= payment.amount
             self.balanceOf[payment.receiver] += payment.amount
 
+        # Send one Transfer event per successful payment.
         log Transfer(msg.sender, payment.receiver, payment.amount)
 
         pay_count += 1
@@ -141,7 +164,7 @@ def batchTransfer(payments: DynArray[Payment, MAX_PAYMENTS], min_gas_remaining: 
     if pay_count > 0:
         self.balanceOf[msg.sender] = owner_balance
     
-    # Log the batch event here.
+    # Report the final disposition for this Payment batch.
     log BatchTransfer(msg.sender, self.balanceOf[msg.sender], pay_count, pay_value, per_transfer_cost, gas_exhausted)
 
     return pay_count
