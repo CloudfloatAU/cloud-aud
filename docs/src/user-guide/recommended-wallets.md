@@ -30,3 +30,17 @@ in the same wallet. You will need to import the **CAUD** token in order to see i
 - [Website](https://token.im/?locale=en-US)
 - [GitHub](https://github.com/consenlabs/token-core) (only core)
 
+
+
+## Desktop wallets
+
+### ![imToken](../_static/wallets/enkrypt.png) Enkrypt
+
+Browser extension by the MyEtherWallet team. You will need to manually add the **CAUD**
+token contract on Polygon.
+
+
+💻 available on: `Chrome`, `Firefox`, `Brave`, `Edge`, `Opera` and `Safari`.
+
+- [Website](https://www.enkrypt.com)
+- [GitHub](https://github.com/enkryptcom/enKrypt)
