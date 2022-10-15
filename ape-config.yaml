@@ -7,10 +7,6 @@ plugins:
 default_ecosystem: ethereum
 
 ethereum:
-  ropsten:
-    default_provider: geth
-  rinkeby:
-    default_provider: geth
   goerli:
     default_provider: geth
   mainnet:
@@ -22,10 +18,6 @@ polygon:
 
 geth:
   ethereum:
-    ropsten:
-      uri: https://rpc.ankr.com/eth_ropsten
-    rinkeby:
-      uri: https://rpc.ankr.com/eth_rinkeby
     goerli:
       uri: https://rpc.ankr.com/eth_goerli
     mainnet:

@@ -9,7 +9,7 @@
 project = "Cloud AUD"
 copyright = "2022, Cloudfloat"
 author = "Cloudfloat"
-# release = "O.O.1"
+
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
