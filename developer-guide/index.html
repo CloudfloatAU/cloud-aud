@@ -3,13 +3,13 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Cloud AUD documentation" href="index.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Use a hardware wallet" href="hardware-wallets.html" /><link rel="prev" title="Recommended wallets" href="../user-guide/recommended-wallets.html" />
 
     <meta name="generator" content="sphinx-5.2.2, furo 2022.09.15"/>
-        <title>Use a hardware wallet - Cloud AUD documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+        <title>Developer guide - Cloud AUD documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
 
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">Cloud AUD  documentation</div></a>
+      <a href="../index.html"><div class="brand">Cloud AUD  documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -134,7 +134,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -143,19 +143,26 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
   <span class="sidebar-brand-text">Cloud AUD  documentation</span>
   
-</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Use a hardware wallet</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user-guide/index.html">User guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/recommended-wallets.html">Recommended wallets</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Developer guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="hardware-wallets.html">Use a hardware wallet</a></li>
+</ul>
+</li>
 </ul>
 
 </div>
@@ -183,56 +190,26 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="use-a-hardware-wallet">
-<h1>Use a hardware wallet<a class="headerlink" href="#use-a-hardware-wallet" title="Permalink to this heading">#</a></h1>
-<section id="trezor">
-<h2>Trezor<a class="headerlink" href="#trezor" title="Permalink to this heading">#</a></h2>
-<p>You will need the <a class="reference external" href="https://github.com/ApeWorX/ape-trezor"><code class="docutils literal notranslate"><span class="pre">ape-trezor</span></code></a> plugin. Install
-it with the following command:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ape plugins install trezor
-</pre></div>
+          <section id="developer-guide">
+<h1>Developer guide<a class="headerlink" href="#developer-guide" title="Permalink to this heading">#</a></h1>
+<p>These pages provide information on working with the <strong>Cloud AUD</strong> smart contract and
+associated developer tools.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section is intended for developers. Got to the <a class="reference internal" href="../user-guide/index.html"><span class="doc std std-doc">User guide</span></a>
+section if you are looking for the general documentation.</p>
 </div>
-<p>Then, add the Trezor account to <code class="docutils literal notranslate"><span class="pre">ape</span></code>:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ape trezor add --hd-path <span class="s2">&quot;m/44&#39;/1&#39;/0&#39;/0&quot;</span> trezor
-
-<span class="c1"># you will be prompted to unlock your Trezor, and to select which account you want to</span>
-<span class="c1"># import</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">--hd-path</span> <span class="pre">&quot;m/44'/1'/0'/0&quot;</span></code> indicates Trezor’s default derivation path. You will not be
-able to sign transactions using a different derivation path by default (<a class="reference external" href="https://github.com/trezor/trezor-firmware/issues/1336#issuecomment-720126545">learn more</a>).</p>
-<p>Your Trezor account is now ready, you can now interact with the contract as you normally
-would.</p>
-</section>
-<section id="ledger">
-<h2>Ledger<a class="headerlink" href="#ledger" title="Permalink to this heading">#</a></h2>
-<p>You will need the <a class="reference external" href="https://github.com/ApeWorX/ape-ledger"><code class="docutils literal notranslate"><span class="pre">ape-ledger</span></code></a> plugin. Install
-it with the following command:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ape plugins install ledger
-</pre></div>
-</div>
-<p>You must:</p>
-<ul class="simple">
-<li><p>have the Ledger USB device connected</p></li>
-<li><p>have the Ledger USB device unlocked (by entering the passcode)</p></li>
-<li><p>and have the Ethereum app open, then run:</p></li>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware-wallets.html">Use a hardware wallet</a></li>
 </ul>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ape ledger add ledger
-</pre></div>
 </div>
-<p><strong>⚠️ You need to enable <a class="reference external" href="https://support.ledger.com/hc/en-us/articles/4499092909085-Allowing-blind-signing-in-the-Solana-SOL-app?docs=true">blind signing</a>
-to interact with the contract:</strong></p>
-<p><img alt="" src="https://support.ledger.com/hc/article_attachments/4499097590173/solana_blind.gif" /></p>
-<p><strong>⚠️ Currently, the ape-ledger plugin only supports Ethereum.</strong> <a class="reference external" href="https://github.com/ApeWorX/ape-ledger/issues/23">See related issue</a>.</p>
-<p>Your Ledger account is now ready, you can now interact with the contract as you normally
-would.</p>
-</section>
 </section>
 
         </article>
@@ -240,15 +217,23 @@ would.</p>
       <footer>
         
         <div class="related-pages">
-          
-          <a class="prev-page" href="index.html">
+          <a class="next-page" href="hardware-wallets.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Use a hardware wallet</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../user-guide/recommended-wallets.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Home</div>
+                <div class="title">Recommended wallets</div>
                 
               </div>
             </a>
@@ -272,38 +257,18 @@ would.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Use a hardware wallet</a><ul>
-<li><a class="reference internal" href="#trezor">Trezor</a></li>
-<li><a class="reference internal" href="#ledger">Ledger</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/scripts/furo.js"></script>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

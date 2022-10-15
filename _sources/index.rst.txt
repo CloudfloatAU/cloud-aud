@@ -2,7 +2,7 @@ Cloud AUD documentation
 =======================
 
 
-.. include:: ../README.md
+.. include:: ../../README.md
    :parser: myst_parser.sphinx_
 
 
@@ -12,4 +12,5 @@ Learn more
 .. toctree::
    :maxdepth: 2
 
-   hardware-wallets.md
+   user-guide/index.md
+   developer-guide/index.md
