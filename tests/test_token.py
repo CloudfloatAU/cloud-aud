@@ -211,14 +211,16 @@ def test_batch_larger_than_max_size(token, owner, accounts):
     # print("Logs[%s] = %s." %(len(logs),logs))
 
 
-def test_batch_transfer_aborts_when_hits_zero_address(token, owner, accounts):
+def test_batch_transfer_aborts_when_hits_zero_address(
+    token, owner, accounts, ZERO_ADDRESS
+):
     token.mint(owner, 1000, sender=owner)
     payments = []
     for i in range(9):
         payments.append((accounts[i + 1], 1))
 
     # Change the 4th tx to go to address 0.
-    payments[3] = ("0x0000000000000000000000000000000000000000", 1)
+    payments[3] = (ZERO_ADDRESS, 1)
 
     tx = token.batchTransfer(payments, sender=owner, gas="1000000")
     assert tx.failed is False
