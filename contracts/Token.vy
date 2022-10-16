@@ -158,7 +158,7 @@ def batchTransfer(payments: DynArray[Payment, MAX_PAYMENTS], min_gas_remaining: 
             per_transfer_cost = gas_remaining - msg.gas
         gas_remaining = msg.gas
 
-    if pay_count > 0:
+    if pay_value > 0:
         self.balanceOf[msg.sender] = owner_balance
     
     # Report the final disposition for this Payment batch.
