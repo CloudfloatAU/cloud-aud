@@ -82,7 +82,7 @@ def test_batch_transfer(token, owner, accounts):
         starting_balances.append(token.balanceOf(accounts[i + 1]))
 
     tx = token.batchTransfer(payments, sender=owner, gas="1000000")
-    assert tx.failed == False
+    assert tx.failed is False
 
     # Compare pre/post tx balances for all accounts.
     assert starting_balances[0] == token.balanceOf(accounts[0]) + 9
@@ -99,11 +99,11 @@ def test_batch_transfer(token, owner, accounts):
 
     print("GasExhausted = %s." % event.gas_exhausted)
     print("GasPerTx = %s." % event.gas_per_tx)
-    assert event.gas_exhausted == False
+    assert event.gas_exhausted is False
     assert event.tx_count == 9
     assert event.tx_value == 9
 
-    assert tx.ran_out_of_gas == False
+    assert tx.ran_out_of_gas is False
 
 
 def test_batch_transfer_exhaust_min_gas_remaining(token, owner, accounts):
@@ -118,18 +118,18 @@ def test_batch_transfer_exhaust_min_gas_remaining(token, owner, accounts):
 
     # 40,000 gas will get the tx started but abort on the first one.
     tx = token.batchTransfer(payments, sender=owner, gas="40000")
-    assert tx.failed == False
+    assert tx.failed is False
 
     logs = list(tx.decode_logs(token.BatchTransfer))
 
-    assert logs[0].gas_exhausted == True
+    assert logs[0].gas_exhausted is True
     assert logs[0].tx_count == 0
     assert logs[0].tx_value == 0
 
     logs = list(tx.decode_logs(token.Transfer))
     assert len(logs) == 0
 
-    assert tx.ran_out_of_gas == False
+    assert tx.ran_out_of_gas is False
 
 
 def test_batch_transfer_partial_batch_only(token, owner, accounts):
@@ -144,11 +144,11 @@ def test_batch_transfer_partial_batch_only(token, owner, accounts):
 
     # 120,000 gas will get the tx started but abort after the second one.
     tx = token.batchTransfer(payments, sender=owner, gas="120000")
-    assert tx.failed == False
+    assert tx.failed is False
 
     logs = list(tx.decode_logs(token.BatchTransfer))
 
-    assert logs[0].gas_exhausted == True
+    assert logs[0].gas_exhausted is True
     assert logs[0].tx_count == 2
     assert logs[0].tx_value == 2
 
@@ -156,7 +156,7 @@ def test_batch_transfer_partial_batch_only(token, owner, accounts):
     print("Transfer Logs[%s] = %s." % (len(logs), logs))
     assert len(logs) == 2
 
-    assert tx.ran_out_of_gas == False
+    assert tx.ran_out_of_gas is False
 
 
 def test_batch_transfer_insufficient_funds(token, owner, accounts):
@@ -170,12 +170,12 @@ def test_batch_transfer_insufficient_funds(token, owner, accounts):
 
     tx = token.batchTransfer(payments, sender=owner, gas="10000000")
 
-    assert tx.failed == False
+    assert tx.failed is False
 
     logs = list(tx.decode_logs(token.BatchTransfer))
 
     print("BatchTransfer logs: %s", logs)
-    assert logs[0].gas_exhausted == False
+    assert logs[0].gas_exhausted is False
     assert logs[0].tx_count == 1
     assert logs[0].tx_value == 2
 
@@ -185,7 +185,7 @@ def test_batch_transfer_insufficient_funds(token, owner, accounts):
 
     print("Owner balance: %s." % token.balanceOf(owner))
 
-    assert tx.ran_out_of_gas == False
+    assert tx.ran_out_of_gas is False
 
 
 def test_batch_larger_than_max_size(token, owner, accounts):
@@ -199,7 +199,7 @@ def test_batch_larger_than_max_size(token, owner, accounts):
     # with ape.reverts():
     tx = token.batchTransfer(payments, sender=owner, gas="1000000")
 
-    assert tx.failed == True
+    assert tx.failed is True
 
     # print(token.raise_for_status())
 
@@ -221,7 +221,7 @@ def test_batch_transfer_aborts_when_hits_zero_address(token, owner, accounts):
     payments[3] = ("0x0000000000000000000000000000000000000000", 1)
 
     tx = token.batchTransfer(payments, sender=owner, gas="1000000")
-    assert tx.failed == False
+    assert tx.failed is False
 
     logs = list(tx.decode_logs(token.Transfer))
     print("Logs[%s] = %s." % (len(logs), logs))
@@ -233,11 +233,11 @@ def test_batch_transfer_aborts_when_hits_zero_address(token, owner, accounts):
 
     print("GasExhausted = %s." % event.gas_exhausted)
     print("GasPerTx = %s." % event.gas_per_tx)
-    assert event.gas_exhausted == False
+    assert event.gas_exhausted is False
     assert event.tx_count == 3
     assert event.tx_value == 3
 
-    assert tx.ran_out_of_gas == False
+    assert tx.ran_out_of_gas is False
 
 
 def test_gas_savings_vs_token_transfer(token, owner, accounts):
@@ -284,12 +284,12 @@ def test_gas_savings_vs_token_transfer(token, owner, accounts):
         )
     )
 
-    assert tx_transfer1.failed == False
-    assert tx_transfer2.failed == False
-    assert tx_transfer3.failed == False
-    assert tx_batch1.failed == False
-    assert tx_batch2.failed == False
-    assert tx_batch3.failed == False
+    assert tx_transfer1.failed is False
+    assert tx_transfer2.failed is False
+    assert tx_transfer3.failed is False
+    assert tx_batch1.failed is False
+    assert tx_batch2.failed is False
+    assert tx_batch3.failed is False
 
     tx_transfer1 = token.transfer(accounts[1], 1, sender=owner, gas="1000000")
     tx_batch1 = token.batchTransfer([(accounts[2], 1)], sender=owner, gas="1000000")
@@ -332,12 +332,12 @@ def test_gas_savings_vs_token_transfer(token, owner, accounts):
         )
     )
 
-    assert tx_transfer1.failed == False
-    assert tx_transfer2.failed == False
-    assert tx_transfer3.failed == False
-    assert tx_batch1.failed == False
-    assert tx_batch2.failed == False
-    assert tx_batch3.failed == False
+    assert tx_transfer1.failed is False
+    assert tx_transfer2.failed is False
+    assert tx_transfer3.failed is False
+    assert tx_batch1.failed is False
+    assert tx_batch2.failed is False
+    assert tx_batch3.failed is False
 
     payments = []
     for i in range(100):
@@ -353,7 +353,7 @@ def test_gas_savings_vs_token_transfer(token, owner, accounts):
         )
     )
 
-    assert tx_batch100.failed == False
+    assert tx_batch100.failed is False
 
 
 def test_transfer_from(token, owner, accounts):
