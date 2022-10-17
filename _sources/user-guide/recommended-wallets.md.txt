@@ -6,6 +6,8 @@ If you are not familiar with cryptocurrency wallets, you can
 [learn more here](https://ethereum.org/en/wallets/).
 ```
 
+---
+
 ## Mobile wallets
 
 ### ![Rainbow wallet](../_static/wallets/rainbow.png) Rainbow wallet
@@ -31,6 +33,7 @@ in the same wallet. You will need to import the **CAUD** token in order to see i
 - [GitHub](https://github.com/consenlabs/token-core) (only core)
 
 
+---
 
 ## Desktop wallets
 
@@ -44,3 +47,36 @@ token contract on Polygon.
 
 - [Website](https://www.enkrypt.com)
 - [GitHub](https://github.com/enkryptcom/enKrypt)
+
+
+### ![metamask](../_static/wallets/metamask.png) Metamask
+
+The most popular browser extension wallet. You will need to manually change the chain
+to polygon.
+
+Metamask is known to be slow and buggy at times. Only use it if you are already familiar
+with it.
+
+💻 available on: `Chrome`, `Firefox`, `Brave`, `Edge` and `Opera`.
+
+📲 it is also available on mobile, with some differences from the desktop version.
+
+- [Website](https://metamask.io)
+- [GitHub](https://github.com/MetaMask/metamask-extension/)
+
+
+---
+
+## Hardware wallets
+
+```{note}
+Hardware wallets offer better security for storing cryptocurrencies.
+```
+
+### ![ledger](../_static/wallets/ledger.png) Ledger
+
+Ledger is supported via the Ledger Live application. Create a Polygon account and
+**CAUD** should show when received without any additional configuration.
+
+- [Website](https://www.ledger.com)
+- [GitHub](https://github.com/LedgerHQ)
