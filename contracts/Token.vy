@@ -136,7 +136,7 @@ def batchTransfer(
     gas_remaining: uint256 = msg.gas
     gas_exhausted: bool = False
 
-    owner_balance: uint256 = self.balanceOf[msg.sender]
+    sender_balance: uint256 = self.balanceOf[msg.sender]
 
     for payment in payments:
         # Break if we don't have sufficient gas.
@@ -149,12 +149,12 @@ def batchTransfer(
             break
 
         # End if insufficient funds remaining during the batch.
-        if owner_balance < payment.amount:
+        if sender_balance < payment.amount:
             break
 
         # If sender & receiver are different addresses then do the math.
         if msg.sender != payment.receiver:
-            owner_balance -= payment.amount
+            sender_balance -= payment.amount
             self.balanceOf[payment.receiver] += payment.amount
 
         # Send one Transfer event per successful payment.
@@ -170,7 +170,7 @@ def batchTransfer(
         gas_remaining = msg.gas
 
     if pay_value > 0:
-        self.balanceOf[msg.sender] = owner_balance
+        self.balanceOf[msg.sender] = sender_balance
 
     # Report the final disposition for this Payment batch.
     log BatchTransfer(
