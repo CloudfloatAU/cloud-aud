@@ -1,4 +1,4 @@
-# @version 0.3.3
+# @version 0.3.7
 
 """
 @title Bare-bones Token implementation
@@ -15,6 +15,11 @@ implements: ERC20
 NAME: constant(String[20]) = "Cloud AUD"
 SYMBOL: constant(String[5]) = "CAUD"
 DECIMALS: constant(uint8) = 8
+
+# batchTransfer defaults for gas accounting.
+MIN_GAS_REMAINING: constant(uint256) = 30000  # Use to reserve remaining gas in case calling from contract that needs to do more things.
+MAX_PAYMENTS: constant(uint256) = 200  # Max size of batchTransfer payment batches.
+EST_GAS_PER_TRANSFER: constant(uint256) = 35600  # Initial estimate of the cost for a single payment transfer.
 
 
 # ERC20 State Variables
@@ -37,6 +42,14 @@ event Approval:
 event OwnershipTransfer:
     previousOwner: indexed(address)
     newOwner: indexed(address)
+
+event BatchTransfer:
+    sender: indexed(address)
+    sender_balance: uint256
+    tx_count: uint256
+    tx_value: uint256
+    gas_per_tx: uint256
+    gas_exhausted: bool
 
 
 owner: public(address)
@@ -69,12 +82,112 @@ def decimals() -> uint8:
 
 @external
 def transfer(receiver: address, amount: uint256) -> bool:
+    """
+    @notice Transfers an amount of tokens from the caller to the receiver, if caller's
+        token balance allows.
+    @param receiver The address for the tokens to be sent to.
+    @param amount The amount of tokens to be transferred, in raw integer format.
+    """
     assert receiver != ZERO_ADDRESS, "Cannot transfer to null address."
     self.balanceOf[msg.sender] -= amount
     self.balanceOf[receiver] += amount
 
     log Transfer(msg.sender, receiver, amount)
     return True
+
+
+# Payment structure - compose an array of no more than MAX_PAYMENTS of these.
+# Do not allow any receiver addresses to be 0 address as burns are not allowed.
+struct Payment:
+    receiver: address
+    amount: uint256
+
+
+@external
+def batchTransfer(
+    payments: DynArray[Payment, MAX_PAYMENTS],
+    min_gas_remaining: uint256 = MIN_GAS_REMAINING
+) -> uint256:
+    """
+    @notice Saves gas fees by batching multiple transfers from a single
+        address into one tx. Performs gas accounting to safely execute
+        as many txs in the batch as possible without hitting gas exhaustion
+        forcing a tx revert.
+
+        Publishes one Transfer event per payment processed.
+
+        Publishes one BatchTransfer event at the end reporting the sending
+        wallet address, its remaining balance, how many payments were transferred,
+        the total value, the max per transfer gas, and whether or not the batch had
+        left over payments due to gas exhaustion.
+
+    @param payments A DynArray of payments. See struct above.
+
+    @param min_gas_remaining In order to support gas-safe calls from other smart
+        contracts, this function takes a min_gas_remaining parameter so batchTransfer's
+        gas accounting will ensure at least that qty of gas remains for any follow on
+        functions that the calling contract may need to finish its own processing.
+        This saves client code from having to do lots of complex and non-deterministic
+        gas accounting of its own before sending batches.
+
+    @return a uint of how many transactions were sent. batchTransfer will attempt to
+        make as many payments from the batch as possible with the gas budget available.
+        It is up to the caller to manage resubmitting any payments that did not get
+        processed in the initial batch.
+    """
+    pay_count: uint256 = 0
+    pay_value: uint256 = 0
+    per_transfer_cost: uint256 = EST_GAS_PER_TRANSFER
+    gas_remaining: uint256 = msg.gas
+    gas_exhausted: bool = False
+
+    sender_balance: uint256 = self.balanceOf[msg.sender]
+
+    for payment in payments:
+        # Break if we don't have sufficient gas.
+        if msg.gas < (min_gas_remaining + per_transfer_cost):
+            gas_exhausted = True
+            break
+
+        # We're complete if any receiver is a zero address.
+        if payment.receiver == ZERO_ADDRESS:
+            break
+
+        # End if insufficient funds remaining during the batch.
+        if sender_balance < payment.amount:
+            break
+
+        # If sender & receiver are different addresses then do the math.
+        if msg.sender != payment.receiver:
+            sender_balance -= payment.amount
+            self.balanceOf[payment.receiver] += payment.amount
+
+        # Send one Transfer event per successful payment.
+        log Transfer(msg.sender, payment.receiver, payment.amount)
+
+        pay_count += 1
+        pay_value += payment.amount
+
+        if per_transfer_cost == EST_GAS_PER_TRANSFER:
+            per_transfer_cost = gas_remaining - msg.gas
+        if per_transfer_cost < gas_remaining - msg.gas:
+            per_transfer_cost = gas_remaining - msg.gas
+        gas_remaining = msg.gas
+
+    if pay_value > 0:
+        self.balanceOf[msg.sender] = sender_balance
+
+    # Report the final disposition for this Payment batch.
+    log BatchTransfer(
+        msg.sender,
+        self.balanceOf[msg.sender],
+        pay_count,
+        pay_value,
+        per_transfer_cost,
+        gas_exhausted
+    )
+
+    return pay_count
 
 
 @external
