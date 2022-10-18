@@ -14,6 +14,7 @@ def test_initial_state(token, owner):
 
     # Check of intial state of authorization
     assert token.owner() == owner
+    assert token.minter() == owner
 
     # Check intial balance of tokens
     token.mint(owner, 1000, sender=owner)

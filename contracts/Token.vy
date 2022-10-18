@@ -51,14 +51,19 @@ event BatchTransfer:
     gas_per_tx: uint256
     gas_exhausted: bool
 
+event MinterTransfer:
+    previousMinter: indexed(address)
+    newMinter: indexed(address)
+
 
 owner: public(address)
-isMinter: public(HashMap[address, bool])
+minter: public(address)
 
 
 @external
 def __init__():
     self.owner = msg.sender
+    self.minter = msg.sender
     self.totalSupply = 0
 
 
@@ -243,38 +248,12 @@ def mint(receiver: address, amount: uint256) -> bool:
     @param amount The amount of tokens to mint.
     @return A boolean that indicates if the operation was successful.
     """
-    assert msg.sender == self.owner or self.isMinter[msg.sender], "Access denied."
+    assert msg.sender == self.minter, "Access denied."
 
     self.totalSupply += amount
     self.balanceOf[receiver] += amount
 
     log Transfer(ZERO_ADDRESS, receiver, amount)
-    return True
-
-
-@external
-def addMinter(target: address) -> bool:
-    """
-    @notice Function to grant minter role to targeted address.
-    @param target Address to have token minter role granted.
-    @return A boolean that indicates if the operation was successful.
-    """
-    assert msg.sender == self.owner
-    assert target != ZERO_ADDRESS, "Cannot add null address as minter."
-    self.isMinter[target] = True
-    return True
-
-
-@external
-def removeMinter(target: address) -> bool:
-    """
-    @notice Function to remove minter role to targeted address.
-    @param target Address to have token minter role removed.
-    @return A boolean that indicates if the operation was successful.
-    """
-    assert msg.sender == self.owner, "Access denied."
-    assert self.isMinter[target] == True, "Targeted address is not a minter."
-    self.isMinter[target] = False
     return True
 
 
@@ -288,9 +267,24 @@ def transferOwnership(target: address) -> bool:
     assert msg.sender == self.owner, "Access denied."
     assert target != ZERO_ADDRESS, "Cannot add null address as owner."
 
-    # revoke owner's minting role as well
-    self.isMinter[self.owner] = False
     self.owner = target
 
     log OwnershipTransfer(msg.sender, target)
+    return True
+
+
+@external
+def transferMinter(target: address) -> bool:
+    """
+    @notice Function to transfer minter role from one address to another.
+    @param target Address of the new minter.
+    @return A boolean that indicates if the operation was successful.
+    """
+    assert msg.sender == self.owner, "Access denied."
+    assert target != ZERO_ADDRESS, "Cannot add null address as minter."
+
+    previous_minter: address = self.minter
+    self.minter = target
+
+    log MinterTransfer(previous_minter, target)
     return True
