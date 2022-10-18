@@ -8,9 +8,16 @@ def test_transfer_minter(token, owner, receiver):
     """
     assert token.minter() == owner
 
-    token.transferMinter(receiver, sender=owner)
+    receipt = token.transferMinter(receiver, sender=owner)
     assert token.minter() == receiver
     assert token.minter() != owner
+
+    # ensure MinterTransfer event was emitted
+    logs = receipt.decode_logs(token.MinterTransfer)
+    assert len(list(logs)) == 1
+    for log in logs:
+        assert log.previousMinter == owner
+        assert log.newMinter == receiver
 
     # test that old minter can no longer mint
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
