@@ -82,12 +82,17 @@ def decimals() -> uint8:
 
 @external
 def transfer(receiver: address, amount: uint256) -> bool:
+    """
+    @notice Transfers an amount of tokens from the caller to the receiver, if caller's
+        token balance allows.
+    @param receiver The address for the tokens to be sent to.
+    @param amount The amount of tokens to be transferred, in raw integer format.
+    """
     assert receiver != ZERO_ADDRESS, "Cannot transfer to null address."
     self.balanceOf[msg.sender] -= amount
     self.balanceOf[receiver] += amount
 
     log Transfer(msg.sender, receiver, amount)
-
     return True
 
 
