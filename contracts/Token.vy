@@ -16,10 +16,18 @@ NAME: constant(String[20]) = "Cloud AUD"
 SYMBOL: constant(String[5]) = "CAUD"
 DECIMALS: constant(uint8) = 8
 
+
 # batchTransfer defaults for gas accounting.
-MIN_GAS_REMAINING: constant(uint256) = 30000  # Use to reserve remaining gas in case calling from contract that needs to do more things.
-MAX_PAYMENTS: constant(uint256) = 200  # Max size of batchTransfer payment batches.
-EST_GAS_PER_TRANSFER: constant(uint256) = 35600  # Initial estimate of the cost for a single payment transfer.
+
+# Use to reserve remaining gas in case calling from contract that needs to do more
+# things. 30,000 gas is roughly one function call.
+MIN_GAS_REMAINING: constant(uint256) = 30000
+
+# Max size of batchTransfer payment batches.
+MAX_PAYMENTS: constant(uint256) = 200
+
+# Initial estimate of the cost for a single payment transfer.
+EST_GAS_PER_TRANSFER: constant(uint256) = 35600
 
 
 # ERC20 State Variables
