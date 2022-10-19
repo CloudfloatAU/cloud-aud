@@ -257,6 +257,7 @@ def mint(receiver: address, amount: uint256) -> bool:
     @return A boolean that indicates if the operation was successful.
     """
     assert msg.sender == self.minter, "Access denied."
+    assert receiver != ZERO_ADDRESS, "Cannot mint to null address."
 
     self.totalSupply += amount
     self.balanceOf[receiver] += amount
