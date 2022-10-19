@@ -2,72 +2,52 @@ import ape
 import pytest
 
 
-def test_add_minter(token, owner, accounts):
+def test_transfer_minter(token, owner, receiver):
     """
-    Test adding new minter.
-    Must trigger MinterAdded Event.
-    Must return true when checking if target isMinter
+    Tests succesful transfer of minter role.
     """
-    target = accounts[1]
-    token.addMinter(target, sender=owner)
-    assert token.isMinter(target) == True
+    assert token.minter() == owner
+
+    receipt = token.transferMinter(receiver, sender=owner)
+    assert token.minter() == receiver
+    assert token.minter() != owner
+
+    # ensure MinterTransfer event was emitted
+    logs = receipt.decode_logs(token.MinterTransfer)
+    assert len(list(logs)) == 1
+    for log in logs:
+        assert log.previousMinter == owner
+        assert log.newMinter == receiver
+
+    # test that old minter can no longer mint
+    with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
+        token.mint(owner, 100, sender=owner)
+    assert exc_info.value.args[0] == "Access denied."
+    assert token.balanceOf(owner) == 0
+
+    # test that the new minter can mint
+    token.mint(receiver, 100, sender=receiver)
+    assert token.balanceOf(receiver) == 100
 
 
-def test_add_minter_targeting_zero_address(token, owner, ZERO_ADDRESS):
+def test_transfer_minter_targeting_zero_address(token, owner, ZERO_ADDRESS):
     """
-    Test adding new minter targeting ZERO_ADDRESS
+    Tests transferring minter role to ZERO_ADDRESS.
     Must trigger a ContractLogicError (ape.exceptions.ContractLogicError)
     """
-    target = ZERO_ADDRESS
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
-        token.addMinter(target, sender=owner)
+        token.transferMinter(ZERO_ADDRESS, sender=owner)
     assert exc_info.value.args[0] == "Cannot add null address as minter."
 
 
-def test_remove_minter(token, owner, accounts):
+def test_transfer_invalid_access(token, accounts):
     """
-    Test removing address from minter role
-    Must return False when checking if target isMinter
+    Tests transferring minter role from a non-owner address.
     """
-    target = accounts[1]
-    token.addMinter(target, sender=owner)
-    assert token.isMinter(target) == True
-    token.removeMinter(target, sender=owner)
-    assert token.isMinter(target) == False
-
-
-def test_remove_minter_targeting_non_minter(token, owner, accounts):
-    """
-    Test removing address from minter role targeting an previously removed target
-    Must trigger a ContractLogicError (ape.exceptions.ContractLogicError)
-    """
-    target = accounts[1]
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
-        token.removeMinter(target, sender=owner)
-    assert exc_info.value.args[0] == "Targeted address is not a minter."
+        token.transferMinter(accounts[2], sender=accounts[2])
+    assert exc_info.value.args[0] == "Access denied."
 
-
-def test_remove_minter_targeting_already_removed(token, owner, accounts):
-    """
-    Test removing address from minter role targeting an previously removed target
-    Must trigger a ContractLogicError (ape.exceptions.ContractLogicError)
-    """
-    target = accounts[1]
-    token.addMinter(target, sender=owner)
-    assert token.isMinter(target) == True
-    token.removeMinter(target, sender=owner)
-    assert token.isMinter(target) == False
     with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
-        token.removeMinter(target, sender=owner)
-    assert exc_info.value.args[0] == "Targeted address is not a minter."
-
-
-def test_remove_minter_targeting_zero_address(token, owner, ZERO_ADDRESS):
-    """
-    Test removing address from minter role targeting ZERO_ADDRESS
-    Must trigger a ContractLogicError (ape.exceptions.ContractLogicError)
-    """
-    target = ZERO_ADDRESS
-    with pytest.raises(ape.exceptions.ContractLogicError) as exc_info:
-        token.removeMinter(target, sender=owner)
-    assert exc_info.value.args[0] == "Targeted address is not a minter."
+        token.transferMinter(accounts[5], sender=accounts[3])
+    assert exc_info.value.args[0] == "Access denied."
