@@ -441,32 +441,6 @@ def test_approve(token, owner, receiver):
     assert token.allowance(owner, spender) == 0
 
 
-def test_mint(token, owner, receiver, ZERO_ADDRESS):
-    """
-    Create an approved amount of tokens.
-    """
-    token.mint(owner, 1000, sender=owner)
-    totalSupply = token.totalSupply()
-    assert totalSupply == 1000
-
-    receiver_balance = token.balanceOf(receiver)
-    assert receiver_balance == 0
-
-    tx = token.mint(receiver, 420, sender=owner)
-
-    logs = list(tx.decode_logs(token.Transfer))
-    assert len(logs) == 1
-    assert logs[0].sender == ZERO_ADDRESS
-    assert logs[0].receiver == receiver.address
-    assert logs[0].amount == 420
-
-    receiver_balance = token.balanceOf(receiver)
-    assert receiver_balance == 420
-
-    totalSupply = token.totalSupply()
-    assert totalSupply == 1420
-
-
 def test_burn(token, owner):
     """
     Burn, i.e. send amount of tokens to ZERO Address.
