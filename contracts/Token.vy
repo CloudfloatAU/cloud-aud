@@ -101,7 +101,7 @@ def transfer(receiver: address, amount: uint256) -> bool:
     @param receiver The address for the tokens to be sent to.
     @param amount The amount of tokens to be transferred, in raw integer format.
     """
-    assert receiver != ZERO_ADDRESS, "Cannot transfer to null address."
+    assert receiver != empty(address), "Cannot transfer to null address."
     self.balanceOf[msg.sender] -= amount
     self.balanceOf[receiver] += amount
 
@@ -163,7 +163,7 @@ def batchTransfer(
             break
 
         # We're complete if any receiver is a zero address.
-        if payment.receiver == ZERO_ADDRESS:
+        if payment.receiver == empty(address):
             break
 
         # End if insufficient funds remaining during the batch.
@@ -211,7 +211,7 @@ def transferFrom(sender: address, receiver: address, amount: uint256) -> bool:
         behalf. For example a decentralized exchange would make use of this method,
         once given authorization via the approve method.
     """
-    assert receiver != ZERO_ADDRESS, "Cannot transfer to null address."
+    assert receiver != empty(address), "Cannot transfer to null address."
     self.allowance[sender][msg.sender] -= amount
     self.balanceOf[sender] -= amount
     self.balanceOf[receiver] += amount
@@ -244,7 +244,7 @@ def burn(amount: uint256) -> bool:
     self.balanceOf[msg.sender] -= amount
     self.totalSupply -= amount
 
-    log Transfer(msg.sender, ZERO_ADDRESS, amount)
+    log Transfer(msg.sender, empty(address), amount)
     return True
 
 
@@ -257,12 +257,12 @@ def mint(receiver: address, amount: uint256) -> bool:
     @return A boolean that indicates if the operation was successful.
     """
     assert msg.sender == self.minter, "Access denied."
-    assert receiver != ZERO_ADDRESS, "Cannot mint to null address."
+    assert receiver != empty(address), "Cannot mint to null address."
 
     self.totalSupply += amount
     self.balanceOf[receiver] += amount
 
-    log Transfer(ZERO_ADDRESS, receiver, amount)
+    log Transfer(empty(address), receiver, amount)
     return True
 
 
@@ -274,7 +274,7 @@ def transferOwnership(target: address) -> bool:
     @return A boolean that indicates if the operation was successful.
     """
     assert msg.sender == self.owner, "Access denied."
-    assert target != ZERO_ADDRESS, "Cannot add null address as owner."
+    assert target != empty(address), "Cannot add null address as owner."
 
     self.owner = target
 
@@ -290,7 +290,7 @@ def transferMinter(target: address) -> bool:
     @return A boolean that indicates if the operation was successful.
     """
     assert msg.sender == self.owner, "Access denied."
-    assert target != ZERO_ADDRESS, "Cannot add null address as minter."
+    assert target != empty(address), "Cannot add null address as minter."
 
     previous_minter: address = self.minter
     self.minter = target
