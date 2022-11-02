@@ -63,3 +63,20 @@ with it.
 
 - [Website](https://metamask.io)
 - [GitHub](https://github.com/MetaMask/metamask-extension/)
+
+
+---
+
+## Browser wallets
+
+### ![Sequence](../_static/wallets/sequence.png) Sequence
+
+Don't want to install anything? This is the wallet for you. Access it via your browser.
+No extra configuration needed, your **CAUD** will appear a short while after being
+received.
+
+
+💻 📱 available on any device/browser.
+
+- [Website](https://sequence.app/wallet)
+- [GitHub](https://github.com/0xsequence/wallet-contracts)
