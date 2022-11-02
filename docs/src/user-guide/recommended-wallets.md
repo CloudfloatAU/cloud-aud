@@ -37,7 +37,7 @@ in the same wallet. You will need to import the **CAUD** token in order to see i
 
 ## Desktop wallets
 
-### ![imToken](../_static/wallets/enkrypt.png) Enkrypt
+### ![Enkrypt](../_static/wallets/enkrypt.png) Enkrypt
 
 Browser extension by the MyEtherWallet team. You will need to manually add the **CAUD**
 token contract on Polygon.
