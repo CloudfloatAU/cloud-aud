@@ -22,6 +22,17 @@ received.
 - [GitHub](https://github.com/rainbow-me/rainbow)
 
 
+### ![Uniswap Wallet](../_static/wallets/uniswap.png) Uniswap Wallet
+
+User friendly and more recent. Built by the Uniswap team. No extra configuration needed,
+your **CAUD** will appear a short while after being received.
+
+📲 available on: `iOS`
+
+- [Website](https://wallet.uniswap.org)
+- [GitHub](https://github.com/Uniswap/wallet)
+
+
 ### ![imToken](../_static/wallets/imToken.png) imToken
 
 This wallet supports a lot more networks. Good option if you want to hold multiple coins
