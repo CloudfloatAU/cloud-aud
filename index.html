@@ -216,8 +216,8 @@
 <p>This project uses <a class="reference external" href="https://vyper.readthedocs.io/en/stable/">Vyper</a> via the
 <a class="reference external" href="https://github.com/apeWorX/ape">ape</a> framework. Install the requirements and required
 plugins with:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install -r requirements.txt
-ape plugins install .
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+ape<span class="w"> </span>plugins<span class="w"> </span>install<span class="w"> </span>.
 </pre></div>
 </div>
 <p>You will also most likely need an account (a.k.a. wallet) to perform any on-chain
@@ -226,8 +226,8 @@ action.
 <section id="deploy-the-contract">
 <h3>Deploy the contract<a class="headerlink" href="#deploy-the-contract" title="Permalink to this heading">#</a></h3>
 <p>To compile and deploy the contract, run:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ape compile
-ape run scripts/deploy.py --network ethereum:ropsten:geth
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ape<span class="w"> </span>compile
+ape<span class="w"> </span>run<span class="w"> </span>scripts/deploy.py<span class="w"> </span>--network<span class="w"> </span>ethereum:ropsten:geth
 </pre></div>
 </div>
 <p><em>A funded account is required to deploy the contract.</em></p>
@@ -236,8 +236,8 @@ ape run scripts/deploy.py --network ethereum:ropsten:geth
 <h3>Mint new tokens<a class="headerlink" href="#mint-new-tokens" title="Permalink to this heading">#</a></h3>
 <p><strong>⚠️ Only the creator of the contract or an account with minter role can mint new
 tokens!</strong></p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ape compile
-ape run scripts/mint.py --network ethereum:ropsten:geth
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ape<span class="w"> </span>compile
+ape<span class="w"> </span>run<span class="w"> </span>scripts/mint.py<span class="w"> </span>--network<span class="w"> </span>ethereum:ropsten:geth
 </pre></div>
 </div>
 </section>
@@ -252,16 +252,28 @@ extension of <a class="reference external" href="https://peps.python.org/pep-000
 <summary>More info on how to use black.</summary>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># To automatically format your code, do the following:</span>
 <span class="c1"># install black if you haven&#39;t already</span>
-pip install black
+pip<span class="w"> </span>install<span class="w"> </span>black
 
 <span class="c1"># format every Python file in the current working directory</span>
-black .
+black<span class="w"> </span>.
 
 <span class="c1"># or format a single file</span>
-black file.py
+black<span class="w"> </span>file.py
 </pre></div>
 </div>
-</details></section>
+</details>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">#</a></h3>
+<p>Docs are found in the <code class="docutils literal notranslate"><span class="pre">docs/</span></code> folder.</p>
+<p>You can build them locally with the following commands:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>docs/requirements.txt<span class="w">  </span><span class="c1"># execute this only once</span>
+./build_docs.sh
+</pre></div>
+</div>
+<p>The site is now built. You can access it locally by opening <code class="docutils literal notranslate"><span class="pre">docs/_build/index.html</span></code> in
+your preferred browser.</p>
+</section>
 </section>
 </section>
 <section id="learn-more">
@@ -335,6 +347,7 @@ black file.py
 </li>
 <li><a class="reference internal" href="#contribute">Contribute</a><ul>
 <li><a class="reference internal" href="#coding-style">Coding style</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a></li>
 </ul>
 </li>
 </ul>
