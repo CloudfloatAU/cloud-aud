@@ -115,10 +115,10 @@ def test_batch_transfer_exhaust_min_gas_remaining(token, owner, accounts):
 
     # Token.vy assumptions:
     # MIN_GAS_REMAINING == 30,000
-    # EST_GAS_PER_TRANSFER == 29000
+    # EST_GAS_PER_TRANSFER == 35600
 
     # 40,000 gas will get the tx started but abort on the first one.
-    tx = token.batchTransfer(payments, sender=owner, gas="40000")
+    tx = token.batchTransfer(payments, sender=owner, gas=40_000)
     assert tx.failed is False
 
     logs = list(tx.decode_logs(token.BatchTransfer))
@@ -141,10 +141,10 @@ def test_batch_transfer_partial_batch_only(token, owner, accounts):
 
     # Token.vy assumptions:
     # MIN_GAS_REMAINING == 30,000
-    # EST_GAS_PER_TRANSFER == 29000
+    # EST_GAS_PER_TRANSFER == 35600
 
     # 120,000 gas will get the tx started but abort after the second one.
-    tx = token.batchTransfer(payments, sender=owner, gas="120000")
+    tx = token.batchTransfer(payments, sender=owner, gas=120_000)
     assert tx.failed is False
 
     logs = list(tx.decode_logs(token.BatchTransfer))
@@ -169,7 +169,7 @@ def test_batch_transfer_insufficient_funds(token, owner, accounts):
 
     print("Owner balance: %s." % token.balanceOf(owner))
 
-    tx = token.batchTransfer(payments, sender=owner, gas="10000000")
+    tx = token.batchTransfer(payments, sender=owner, gas=10_000_000)
 
     assert tx.failed is False
 
@@ -197,19 +197,8 @@ def test_batch_larger_than_max_size(token, owner, accounts):
     for i in range(201):
         payments.append((accounts[(i % 9) + 1], 1))
 
-    # with ape.reverts():
-    tx = token.batchTransfer(payments, sender=owner, gas="1000000")
-
-    assert tx.failed is True
-
-    # print(token.raise_for_status())
-
-    # logs = list(tx.decode_logs(token.Transfer))
-    # print("Logs[%s] = %s." %(len(logs),logs))
-    # print("%s transfers!" % len(logs))
-
-    # logs = list(tx.decode_logs(token.BatchTransfer))
-    # print("Logs[%s] = %s." %(len(logs),logs))
+    with raises(ape.exceptions.ContractLogicError):
+        token.batchTransfer(payments, sender=owner, gas=1_000_000)
 
 
 def test_batch_transfer_aborts_when_hits_zero_address(
@@ -223,7 +212,7 @@ def test_batch_transfer_aborts_when_hits_zero_address(
     # Change the 4th tx to go to address 0.
     payments[3] = (ZERO_ADDRESS, 1)
 
-    tx = token.batchTransfer(payments, sender=owner, gas="1000000")
+    tx = token.batchTransfer(payments, sender=owner, gas=1_000_000)
     assert tx.failed is False
 
     logs = list(tx.decode_logs(token.Transfer))
