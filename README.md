@@ -74,3 +74,17 @@ black .
 black file.py
 ```
 </details>
+
+### Documentation
+
+Docs are found in the `docs/` folder.
+
+You can build them locally with the following commands:
+
+```shell
+pip install -r docs/requirements.txt  # execute this only once
+./build_docs.sh
+```
+
+The site is now built. You can access it locally by opening `docs/_build/index.html` in
+your preferred browser.
