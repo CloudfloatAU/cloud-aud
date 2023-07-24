@@ -13,6 +13,24 @@
 </div>
 
 
+## Table of contents
+
+- [Contract address](#contract-address)
+- [Usage](#usage)
+  - [Deploy the contract](#deploy-the-contract)
+  - [Mint new tokens](#mint-new-tokens)
+- [Contribute](#contribute)
+  - [Coding style](#coding-style)
+  - [Documentation](#documentation)
+
+
+## Contract address
+
+Cloud AUD is currently **only** available on the **Polygon PoS** network.
+
+**The only official contract address is: [0xB1EF313E3119e13f827E14D7c90E03180ac828ed](https://polygonscan.com/token/0xb1ef313e3119e13f827e14d7c90e03180ac828ed)**
+
+
 ## Usage
 
 This project uses [Vyper](https://vyper.readthedocs.io/en/stable/) via the
@@ -25,7 +43,7 @@ ape plugins install .
 ```
 
 You will also most likely need an account (a.k.a. wallet) to perform any on-chain
-action.  
+action.
 [Add an account via ape](https://docs.apeworx.io/ape/stable/userguides/accounts.html).
 
 
