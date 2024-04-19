@@ -1,2 +1,2 @@
-eth-ape==0.5.2
+eth-ape==0.5.*
 pytest
