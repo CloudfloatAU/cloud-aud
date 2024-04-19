@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "Cloud AUD"
-copyright = "2022, Cloudfloat"
+copyright = "2024, Cloudfloat"
 author = "Cloudfloat"
 
 
@@ -23,5 +23,14 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "furo"
+html_theme = "shibuya"
 html_static_path = ["_static"]
+
+
+html_theme_options = {
+    "nav_links": [
+        {"title": "Wallet", "url": "https://caud.io"},
+    ]
+}
+
+html_theme_options = {"github_url": "https://github.com/CloudfloatAU/cloud-aud"}
