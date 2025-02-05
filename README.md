@@ -12,8 +12,7 @@
   <a href="https://github.com/CloudfloatAU/cloud-aud/actions/workflows/docs.yml"><img src="https://github.com/CloudfloatAU/cloud-aud/actions/workflows/docs.yml/badge.svg"></a>
 </div>
 
-
-## Table of contents
+# Table of contents
 
 - [Contract address](#contract-address)
 - [Usage](#usage)
@@ -23,15 +22,13 @@
   - [Coding style](#coding-style)
   - [Documentation](#documentation)
 
-
-## Contract address
+# Contract address
 
 Cloud AUD is currently **only** available on the **Polygon PoS** network.
 
 **The only official contract address is: [0xB1EF313E3119e13f827E14D7c90E03180ac828ed](https://polygonscan.com/token/0xb1ef313e3119e13f827e14d7c90e03180ac828ed)**
 
-
-## Usage
+# Usage
 
 This project uses [Vyper](https://vyper.readthedocs.io/en/stable/) via the
 [ape](https://github.com/apeWorX/ape) framework. Install the requirements and required
@@ -46,8 +43,7 @@ You will also most likely need an account (a.k.a. wallet) to perform any on-chai
 action.
 [Add an account via ape](https://docs.apeworx.io/ape/stable/userguides/accounts.html).
 
-
-### Deploy the contract
+## Deploy the contract
 
 To compile and deploy the contract, run:
 
@@ -56,10 +52,9 @@ ape compile
 ape run scripts/deploy.py --network ethereum:ropsten:geth
 ```
 
-*A funded account is required to deploy the contract.*
+_A funded account is required to deploy the contract._
 
-
-### Mint new tokens
+## Mint new tokens
 
 **⚠️ Only the creator of the contract or an account with minter role can mint new
 tokens!**
@@ -69,10 +64,9 @@ ape compile
 ape run scripts/mint.py --network ethereum:ropsten:geth
 ```
 
+# Contribute
 
-## Contribute
-
-### Coding style
+## Coding style
 
 This project uses [black](https://github.com/psf/black) code formatter, which is an
 extension of [PEP8](https://peps.python.org/pep-0008/).
@@ -91,9 +85,10 @@ black .
 # or format a single file
 black file.py
 ```
+
 </details>
 
-### Documentation
+## Documentation
 
 Docs are found in the `docs/` folder.
 

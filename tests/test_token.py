@@ -100,7 +100,7 @@ def test_batch_transfer(token, owner, accounts):
 
     print("GasExhausted = %s." % event.gas_exhausted)
     print("GasPerTx = %s." % event.gas_per_tx)
-    assert event.gas_exhausted is False
+    assert event.gas_exhausted == 0
     assert event.tx_count == 9
     assert event.tx_value == 9
 
@@ -123,7 +123,7 @@ def test_batch_transfer_exhaust_min_gas_remaining(token, owner, accounts):
 
     logs = list(tx.decode_logs(token.BatchTransfer))
 
-    assert logs[0].gas_exhausted is True
+    assert logs[0].gas_exhausted == 1
     assert logs[0].tx_count == 0
     assert logs[0].tx_value == 0
 
@@ -149,7 +149,7 @@ def test_batch_transfer_partial_batch_only(token, owner, accounts):
 
     logs = list(tx.decode_logs(token.BatchTransfer))
 
-    assert logs[0].gas_exhausted is True
+    assert logs[0].gas_exhausted == 1
     assert logs[0].tx_count == 2
     assert logs[0].tx_value == 2
 
@@ -176,7 +176,7 @@ def test_batch_transfer_insufficient_funds(token, owner, accounts):
     logs = list(tx.decode_logs(token.BatchTransfer))
 
     print("BatchTransfer logs: %s", logs)
-    assert logs[0].gas_exhausted is False
+    assert logs[0].gas_exhausted == 0
     assert logs[0].tx_count == 1
     assert logs[0].tx_value == 2
 
@@ -225,7 +225,7 @@ def test_batch_transfer_aborts_when_hits_zero_address(
 
     print("GasExhausted = %s." % event.gas_exhausted)
     print("GasPerTx = %s." % event.gas_per_tx)
-    assert event.gas_exhausted is False
+    assert event.gas_exhausted == 0
     assert event.tx_count == 3
     assert event.tx_value == 3
 

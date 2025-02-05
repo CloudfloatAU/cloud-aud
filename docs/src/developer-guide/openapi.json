@@ -1,0 +1,738 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Cloud Aud Public Api",
+    "description": "Endpoints available to external (non cloudfloat) consumers of CAUD apis",
+    "termsOfService": "https://cloudfloat.com/terms-of-use/",
+    "contact": {
+      "name": "Cloudfloat",
+      "url": "https://cloudfloat.com/contact-us/",
+      "email": "developer-support@cloudfloat.com.au"
+    },
+    "license": { "name": "Copyright 2025 Cloudfloat Pty Ltd" },
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/wallets": {
+      "post": {
+        "tags": ["Wallets"],
+        "summary": "Create a new wallet.",
+        "description": "Create a new CAUD wallet.",
+        "operationId": "create_wallet_wallets_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Wallet" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WalletResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "APIKeyHeader": [] }]
+      },
+      "patch": {
+        "tags": ["Wallets"],
+        "summary": "Update an existing wallet.",
+        "operationId": "update_wallet_wallets_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WalletWithPasscodeAndTopUp"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WalletResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "APIKeyHeader": [] }]
+      }
+    },
+    "/wallets/{unique_id}": {
+      "get": {
+        "tags": ["Wallets"],
+        "summary": "Get Wallet",
+        "operationId": "get_wallet_by_unique_id_wallets__unique_id__get",
+        "security": [{ "APIKeyHeader": [] }],
+        "parameters": [
+          {
+            "name": "unique_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Unique Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WalletResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/{unique_id}/verify_pin": {
+      "post": {
+        "tags": ["Wallets"],
+        "summary": "Verify passcode for an existing wallet.",
+        "operationId": "verify_pin_wallets__unique_id__verify_pin_post",
+        "security": [{ "APIKeyHeader": [] }],
+        "parameters": [
+          {
+            "name": "unique_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Unique Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_verify_pin_wallets__unique_id__verify_pin_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyPinResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/{unique_id}/balance": {
+      "get": {
+        "tags": ["Wallets"],
+        "summary": "Get balance for Wallet",
+        "description": "Get the current balance of a wallet.\n\nArgs:\n    unique_id: unique wallet id\n\nReturns:\n    SendCaudResponseModel: See schema below",
+        "operationId": "get_balance_wallets__unique_id__balance_get",
+        "security": [{ "APIKeyHeader": [] }],
+        "parameters": [
+          {
+            "name": "unique_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Unique Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WalletBalanceResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/{unique_id}/send_caud": {
+      "post": {
+        "tags": ["Wallets"],
+        "summary": "Send caud to a Wallet",
+        "description": "Send caud to a destination wallet address.<br/>\n__Note that amount is in dollars and cents__\n\nArgs:\n    send_caud_model (SendCaudModel): See schema\n\nReturns:\n    SendCaudResponseModel: Send caud response",
+        "operationId": "send_caud_wallets__unique_id__send_caud_post",
+        "security": [{ "APIKeyHeader": [] }],
+        "parameters": [
+          {
+            "name": "unique_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Unique Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SendCaudModel" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendCaudResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/{unique_id}/transactions": {
+      "get": {
+        "tags": ["Wallets"],
+        "summary": "List transactions for a Wallet",
+        "description": "This endpoint is to list transactions for a wallet\n\nArgs:\n    unique_id (str): Wallet ID\n\nReturns:\n    List of transactions",
+        "operationId": "list_transactions_wallets__unique_id__transactions_get",
+        "security": [{ "APIKeyHeader": [] }],
+        "parameters": [
+          {
+            "name": "unique_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Unique Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Transaction" },
+                  "title": "Response List Transactions Wallets  Unique Id  Transactions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/{unique_id}/lock": {
+      "post": {
+        "tags": ["Wallets"],
+        "summary": "Lock a Wallet",
+        "description": "This endpoint is lock a wallet\n\nArgs:\n    unique_id (str): Wallet ID\n\nReturns:\n    LockWalletResponseModel: Wallet details",
+        "operationId": "lock_wallet_wallets__unique_id__lock_post",
+        "security": [{ "APIKeyHeader": [] }],
+        "parameters": [
+          {
+            "name": "unique_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Unique Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LockWalletResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/{unique_id}/unlock": {
+      "post": {
+        "tags": ["Wallets"],
+        "summary": "Unlock a Wallet",
+        "description": "This endpoint is to unlock a wallet\n\nArgs:\n    unique_id (str): Wallet ID\n\nReturns:\n    LockWalletResponseModel: Wallet details",
+        "operationId": "unlock_wallet_wallets__unique_id__unlock_post",
+        "security": [{ "APIKeyHeader": [] }],
+        "parameters": [
+          {
+            "name": "unique_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Unique Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LockWalletResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health_check": {
+      "get": {
+        "tags": ["Health Check Endpoint"],
+        "summary": "Health Check",
+        "operationId": "health_check_health_check_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "anyOf": [{ "type": "string" }, {}]
+                  },
+                  "type": "object",
+                  "title": "Response Health Check Health Check Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BankInfo": {
+        "properties": {
+          "pay_id": {
+            "type": "string",
+            "format": "email",
+            "title": "Pay Id",
+            "examples": ["john.smith@caud.me"]
+          },
+          "bank_name": {
+            "type": "string",
+            "title": "Bank Name",
+            "examples": ["Zepto Float Account"]
+          },
+          "bsb": {
+            "type": "string",
+            "title": "Bsb",
+            "description": "The BSB is also sometimes known as branch code.",
+            "examples": ["802919"]
+          },
+          "account_number": {
+            "type": "string",
+            "title": "Account Number",
+            "examples": ["9699849"]
+          }
+        },
+        "type": "object",
+        "required": ["pay_id", "bank_name", "bsb", "account_number"],
+        "title": "BankInfo"
+      },
+      "Body_verify_pin_wallets__unique_id__verify_pin_post": {
+        "properties": {
+          "wallet_passcode": { "type": "string", "title": "Wallet Passcode" }
+        },
+        "type": "object",
+        "required": ["wallet_passcode"],
+        "title": "Body_verify_pin_wallets__unique_id__verify_pin_post"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": { "$ref": "#/components/schemas/ValidationError" },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LockWalletResponseModel": {
+        "properties": {
+          "wallet_id": { "type": "string", "title": "Wallet Id" },
+          "is_wallet_locked": { "type": "boolean", "title": "Is Wallet Locked" }
+        },
+        "type": "object",
+        "required": ["wallet_id", "is_wallet_locked"],
+        "title": "LockWalletResponseModel"
+      },
+      "SendCaudModel": {
+        "properties": {
+          "to_wallet_id": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "To Wallet Id",
+            "description": "Destination wallet unique identifier to which to send the funds. Provide either this or to_address."
+          },
+          "to_address": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "To Address",
+            "description": "Destination wallet address to which to send the funds. Provide either this or to_wallet_id."
+          },
+          "amount": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Amount",
+            "description": "Amount in dollars and cents",
+            "default": 0,
+            "examples": ["35.12", "99", "101.01"]
+          },
+          "idempotency_key": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Idempotency Key",
+            "description": "Unique key for the transaction to ensure no duplicates. Optional (generated based on timestamp if not provided)"
+          },
+          "transaction_category": {
+            "type": "string",
+            "title": "Transaction Category",
+            "default": "UNKNOWN"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "title": "SendCaudModel"
+      },
+      "SendCaudResponseModel": {
+        "properties": {
+          "hash": { "type": "string", "title": "Hash" },
+          "block_number": { "type": "integer", "title": "Block Number" }
+        },
+        "type": "object",
+        "required": ["hash", "block_number"],
+        "title": "SendCaudResponseModel"
+      },
+      "Transaction": {
+        "properties": {
+          "hash": {
+            "type": "string",
+            "maxLength": 66,
+            "minLength": 66,
+            "title": "Hash",
+            "examples": [
+              "0x99de0ec552a3b8cfa8af4af1e407ffa8427baad07d308bcf39d8da66a79ed15c"
+            ]
+          },
+          "status": {
+            "type": "boolean",
+            "title": "Status",
+            "description": "True if the transaction is successful, False otherwise.",
+            "examples": [true, false]
+          },
+          "timestamp_utc": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Timestamp Utc",
+            "description": "Block timestamp. None if the transaction is not yet confirmed."
+          },
+          "block_height": {
+            "type": "integer",
+            "minimum": -1.0,
+            "title": "Block Height",
+            "description": "Block height of the transaction. If -1, the transaction is not yet confirmed.",
+            "examples": [8971672, -1]
+          },
+          "transaction_category": {
+            "$ref": "#/components/schemas/TransactionCategory"
+          },
+          "amount_in_caud": { "type": "string", "title": "Amount In Caud" },
+          "description": { "type": "string", "title": "Description" },
+          "sender_balance_in_caud": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Sender Balance In Caud"
+          },
+          "receiver_balance_in_caud": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Receiver Balance In Caud"
+          },
+          "sender_address": {
+            "type": "string",
+            "title": "Sender Address",
+            "examples": ["0xcc4fdff3509010ab2e1ca30d31708f969ad21843"]
+          },
+          "receiver_address": {
+            "type": "string",
+            "title": "Receiver Address",
+            "examples": ["0xcc4fdff3509010ab2e1ca30d31708f969ad21843"]
+          }
+        },
+        "type": "object",
+        "required": [
+          "hash",
+          "status",
+          "block_height",
+          "transaction_category",
+          "amount_in_caud",
+          "description",
+          "sender_address",
+          "receiver_address"
+        ],
+        "title": "Transaction"
+      },
+      "TransactionCategory": {
+        "type": "string",
+        "enum": [
+          "BUY",
+          "SELL",
+          "TRANSFER",
+          "INSTALMENT_REPAYMENT",
+          "AUTO_BUY",
+          "CASH_REWARD",
+          "CASHBACK",
+          "YIELD",
+          "EXTERNAL",
+          "UNKNOWN"
+        ],
+        "title": "TransactionCategory",
+        "description": "The various categories associated with CAUD transactions."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": { "type": "string", "title": "Message" },
+          "type": { "type": "string", "title": "Error Type" }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      },
+      "VerifyPinResponseModel": {
+        "properties": {
+          "wallet_id": { "type": "string", "title": "Wallet Id" },
+          "is_correct": { "type": "boolean", "title": "Is Correct" },
+          "message": { "type": "string", "title": "Message" }
+        },
+        "type": "object",
+        "required": ["wallet_id", "is_correct", "message"],
+        "title": "VerifyPinResponseModel"
+      },
+      "Wallet": {
+        "properties": {
+          "wallet_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 4,
+            "pattern": "^[a-zA-Z0-9_]*$",
+            "title": "Wallet Id",
+            "description": "Unique id for this wallet"
+          },
+          "unique_link_id": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Unique Link Id"
+          }
+        },
+        "type": "object",
+        "required": ["wallet_id"],
+        "title": "Wallet"
+      },
+      "WalletBalanceResponseModel": {
+        "properties": {
+          "address": { "type": "string", "title": "Address" },
+          "matic_balance": { "type": "number", "title": "Matic Balance" },
+          "raw_matic_balance": {
+            "type": "integer",
+            "title": "Raw Matic Balance"
+          },
+          "caud_balance": { "type": "number", "title": "Caud Balance" },
+          "raw_caud_balance": { "type": "integer", "title": "Raw Caud Balance" }
+        },
+        "type": "object",
+        "required": [
+          "address",
+          "matic_balance",
+          "raw_matic_balance",
+          "caud_balance",
+          "raw_caud_balance"
+        ],
+        "title": "WalletBalanceResponseModel"
+      },
+      "WalletResponse": {
+        "properties": {
+          "wallet_id": {
+            "type": "string",
+            "title": "Wallet Id",
+            "description": "The wallet URL ID. Anyone with this ID can access the wallet."
+          },
+          "unique_link_id": {
+            "type": "string",
+            "title": "Unique Link Id",
+            "description": "Wallet unique link. If none is provided, a random one will be generated."
+          },
+          "address": { "type": "string", "title": "Address" },
+          "organisation_id": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Organisation Id",
+            "description": "The ID of the organisation owning the wallet."
+          },
+          "has_pin_code": {
+            "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+            "title": "Has Pin Code",
+            "description": "Whether the wallet has a PIN code or not.",
+            "default": false,
+            "examples": [true, false]
+          },
+          "is_wallet_locked": {
+            "type": "boolean",
+            "title": "Is Wallet Locked",
+            "description": "Whether the wallet is locked or not. False upon creation.",
+            "default": false,
+            "examples": [true, false]
+          },
+          "auto_top_up_threshold_in_cents": {
+            "anyOf": [
+              { "type": "integer", "minimum": 0.0 },
+              { "type": "null" }
+            ],
+            "title": "Auto Top Up Threshold In Cents"
+          },
+          "auto_top_up_amount_in_cents": {
+            "anyOf": [
+              { "type": "integer", "minimum": 0.0 },
+              { "type": "null" }
+            ],
+            "title": "Auto Top Up Amount In Cents"
+          },
+          "bank_info": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/BankInfo" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "required": ["wallet_id", "unique_link_id", "address"],
+        "title": "WalletResponse",
+        "description": "A wallet model without a private key that can be safely sent to the client."
+      },
+      "WalletWithPasscodeAndTopUp": {
+        "properties": {
+          "wallet_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 4,
+            "pattern": "^[a-zA-Z0-9_]*$",
+            "title": "Wallet Id",
+            "description": "Unique id for this wallet"
+          },
+          "unique_link_id": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Unique Link Id"
+          },
+          "wallet_passcode": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Wallet Passcode"
+          },
+          "auto_top_up_threshold_in_cents": {
+            "anyOf": [
+              { "type": "integer", "minimum": 0.0 },
+              { "type": "null" }
+            ],
+            "title": "Auto Top Up Threshold In Cents"
+          },
+          "auto_top_up_amount_in_cents": {
+            "anyOf": [
+              { "type": "integer", "minimum": 0.0 },
+              { "type": "null" }
+            ],
+            "title": "Auto Top Up Amount In Cents"
+          }
+        },
+        "type": "object",
+        "required": ["wallet_id"],
+        "title": "WalletWithPasscodeAndTopUp"
+      }
+    },
+    "securitySchemes": {
+      "APIKeyHeader": { "type": "apiKey", "in": "header", "name": "x-api-key" }
+    }
+  }
+}
