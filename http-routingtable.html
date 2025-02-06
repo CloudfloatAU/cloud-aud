@@ -2,7 +2,7 @@
 <html lang="en" data-accent-color="violet" data-content_root="./">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Index - Cloud AUD documentation</title><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" /><script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>HTTP Routing Table - Cloud AUD documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
     function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
     setColorMode(localStorage._theme||"auto");
   </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=397bb51e" />
@@ -18,7 +18,14 @@
   --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
 }
 </style>
-    </head>
+    
+
+
+    <script>
+      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
+    </script>
+
+</head>
 <body><div class="sy-head">
   <div class="sy-head-blur"></div>
   <div class="sy-head-inner sy-container mx-auto">
@@ -53,11 +60,71 @@ data-aria-dark="Switch to auto color mode">
       <article class="yue" role="main">
         
 
-<h1 id="index">Index</h1>
+   <h1>HTTP Routing Table</h1>
 
-<div class="genindex-jumpbox">
- 
-</div>
+   <div class="modindex-jumpbox">
+   <a href="#cap-/health_check"><strong>/health_check</strong></a> | 
+   <a href="#cap-/wallets"><strong>/wallets</strong></a>
+   </div>
+
+   <table class="indextable modindextable">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/health_check"><td></td><td>
+       <strong>/health_check</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="developer-guide/api.html#get--health_check"><code class="xref">GET /health_check</code></a></td><td>
+       <em>Health Check</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/wallets"><td></td><td>
+       <strong>/wallets</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="developer-guide/api.html#get--wallets-unique_id"><code class="xref">GET /wallets/{unique_id}</code></a></td><td>
+       <em>Get Wallet</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="developer-guide/api.html#get--wallets-unique_id-balance"><code class="xref">GET /wallets/{unique_id}/balance</code></a></td><td>
+       <em>Get balance for Wallet</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="developer-guide/api.html#get--wallets-unique_id-transactions"><code class="xref">GET /wallets/{unique_id}/transactions</code></a></td><td>
+       <em>List transactions for a Wallet</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="developer-guide/api.html#post--wallets"><code class="xref">POST /wallets</code></a></td><td>
+       <em>Create a new wallet.</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="developer-guide/api.html#post--wallets-unique_id-lock"><code class="xref">POST /wallets/{unique_id}/lock</code></a></td><td>
+       <em>Lock a Wallet</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="developer-guide/api.html#post--wallets-unique_id-send_caud"><code class="xref">POST /wallets/{unique_id}/send_caud</code></a></td><td>
+       <em>Send caud to a Wallet</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="developer-guide/api.html#post--wallets-unique_id-unlock"><code class="xref">POST /wallets/{unique_id}/unlock</code></a></td><td>
+       <em>Unlock a Wallet</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="developer-guide/api.html#post--wallets-unique_id-verify_pin"><code class="xref">POST /wallets/{unique_id}/verify_pin</code></a></td><td>
+       <em>Verify passcode for an existing wallet.</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="developer-guide/api.html#patch--wallets"><code class="xref">PATCH /wallets</code></a></td><td>
+       <em>Update an existing wallet.</em></td></tr>
+   </table>
 
 
       </article>
